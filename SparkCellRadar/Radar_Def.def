@@ -1,0 +1,5 @@
+LIBRARY "SparkCellRadar"
+EXPORTS
+module_init
+module_deinit
+Panels DATA
