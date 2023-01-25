@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="RadarAircraftCallback.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RadarGaugeCallback.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RadarGaugeDrawable.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RadarPanelCallback.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SparkCellRadar.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RadarPanelCallback.h">
+      <Filter>Header</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RadarAircraftCallback.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RadarGaugeCallback.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RadarGaugeDrawable.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{161d708d-82f9-407a-9935-a26a812466dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{f664784c-6e39-40e5-aefe-e3f938a03be5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Radar_Def.def">
+      <Filter>Source</Filter>
+    </None>
+  </ItemGroup>
+</Project>

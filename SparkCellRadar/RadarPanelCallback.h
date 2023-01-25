@@ -5,22 +5,23 @@
 
 class RadarPanelCallback : public IPanelCCallback {
 public:
-	// Inherited via IPanelCCallback
-	virtual ULONG AddRef() override;
-
-	virtual ULONG Release() override;
+	RadarPanelCallback() : m_RefCount(1) { }
 
 	virtual IPanelCCallback* QueryInterface(LPCSTR pszInterface) override;
 
 	virtual UINT32 GetVersion() override;
 
-	virtual IAircraftCCallback* CreateAircraftCCallback(UINT32 ContainerID) override;
+	virtual IAircraftCCallback* CreateAircraftCCallback(UINT32 containerId) override;
 
 	virtual bool ConvertStringToProperty(LPCSTR keyword, SINT32* pID) override;
 
 	virtual bool ConvertPropertyToString(SINT32 id, LPCSTR* pKeyword) override;
 
 	virtual bool GetPropertyUnits(SINT32 id, ENUM* pEnum) override;
+
+private:
+
+	DECLARE_PANEL_CALLBACK_REFCOUNT(RadarPanelCallback);
 };
 
 #endif // RADAR_PANEL_CALLBACK_H

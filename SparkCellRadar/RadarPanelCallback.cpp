@@ -1,16 +1,6 @@
 #include "RadarPanelCallback.h"
 #include "RadarAircraftCallback.h"
 
-ULONG RadarPanelCallback::AddRef()
-{
-	return 0;
-}
-
-ULONG RadarPanelCallback::Release()
-{
-	return 0;
-}
-
 IPanelCCallback* RadarPanelCallback::QueryInterface(LPCSTR pszInterface)
 {
 	return nullptr;
@@ -18,12 +8,13 @@ IPanelCCallback* RadarPanelCallback::QueryInterface(LPCSTR pszInterface)
 
 UINT32 RadarPanelCallback::GetVersion()
 {
-	return UINT32();
+	//return UINT32();
+	return 1;
 }
 
-IAircraftCCallback* RadarPanelCallback::CreateAircraftCCallback(UINT32 ContainerID)
+IAircraftCCallback* RadarPanelCallback::CreateAircraftCCallback(UINT32 containerId)
 {
-	return new RadarAircraftCallback();
+	return new RadarAircraftCallback(containerId);
 }
 
 bool RadarPanelCallback::ConvertStringToProperty(LPCSTR keyword, SINT32* pID)
@@ -40,3 +31,5 @@ bool RadarPanelCallback::GetPropertyUnits(SINT32 id, ENUM* pEnum)
 {
 	return false;
 }
+
+DEFINE_PANEL_CALLBACK_REFCOUNT(RadarPanelCallback);

@@ -3,16 +3,6 @@
 #include <fstream>
 #include <iostream>
 
-ULONG RadarGaugeCallback::AddRef()
-{
-	return 0;
-}
-
-ULONG RadarGaugeCallback::Release()
-{
-	return 0;
-}
-
 IGaugeCCallback* RadarGaugeCallback::QueryInterface(LPCSTR pszInterface)
 {
 	return nullptr;
@@ -20,7 +10,7 @@ IGaugeCCallback* RadarGaugeCallback::QueryInterface(LPCSTR pszInterface)
 
 void RadarGaugeCallback::Update()
 {
-	std::ofstream of("C:\\Users\\MITD09\\Documents\\out.txt");
+	std::ofstream of("C:\\Users\\ADMIN\\Documents\\out.txt");
 	of << "UPDATE\n";
 	std::cout << "UPDATE\n";
 }
@@ -65,3 +55,5 @@ IGaugeCDrawable* RadarGaugeCallback::CreateGaugeCDrawable(SINT32 id, const IGaug
 
 	return radarGaugeDrawable;
 }
+
+DEFINE_PANEL_CALLBACK_REFCOUNT(RadarGaugeCallback);
