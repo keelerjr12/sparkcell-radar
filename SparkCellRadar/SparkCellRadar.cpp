@@ -57,7 +57,6 @@ void RadarPanelCallbackInit()
 
     if (pRadarPanelCallback)
     {
-        //fs << "CALLBACK STARTED\n";
         auto b = P3D::PdkServices::GetPanelSystem()->PanelRegisterCCallback(RADAR_CALLBACK_NAME, pRadarPanelCallback);
         pRadarPanelCallback->Release();
     }
