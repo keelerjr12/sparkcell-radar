@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<SimBase.Document
+        Type="AceXML"
+        version="1,0"
+        id="SparkCellRadar">
+    <Descr>AceXML Document</Descr>
+    <Filename>SparkCellRadar.xml</Filename>
+    <SimGauge.Gauge id="Gauge" ArtDirectory="C:\GaugeArt">
+	<FloatPosition>0.000,0.000</FloatPosition>
+        <Element id="Map border">
+            <FloatPosition>6.000,7.000</FloatPosition>
+            <Rectangle id="Rectangle">
+                <LineWidth>1</LineWidth>
+                <Bright>True</Bright>
+                <Width>386</Width>
+                <Height>386</Height>
+                <LineColor>0x808080</LineColor>
+            </Rectangle>
+        </Element>		
+<Element>
+			<FloatPosition>8.000,8.000</FloatPosition>
+			<CustomDraw Name="SparkCellRadar:Nav">
+				<Size>382,382</Size>
+				<CustomDrawParam id="Scale" Name="Scale">
+					<Value>80000</Value>
+				</CustomDrawParam>
+				<CustomDrawParam id="Orientation" Name="Orientation">
+					<Value>1</Value>
+				</CustomDrawParam>
+				<CustomDrawParam id="OverlayOn" Name="OverlayOn">
+					<Value>1</Value>
+				</CustomDrawParam>
+				<CustomDrawParam id="Heading" Name="Heading">
+                    <Value>(A:Plane heading degrees true, radians) 
+					(A:Plane heading degrees magnetic, radians) -
+					</Value>
+				</CustomDrawParam>
+				<CustomDrawParam id="Latitude" Name="Latitude">
+                    <Value>(A:GPS POSITION LAT, Radians)</Value>
+                </CustomDrawParam>
+                <CustomDrawParam id="Longitude" Name="Longitude">
+                    <Value>(A:GPS POSITION LON, Radians)</Value>
+                </CustomDrawParam>
+			</CustomDraw>
+		</Element>
+    </SimGauge.Gauge>
+</SimBase.Document>

@@ -2,7 +2,7 @@
 #include <gauges.h>
 #include "RadarPanelCallback.h"
 
-static const char* const RADAR_CALLBACK_NAME = "SparkCellRadar";
+static const char RADAR_CALLBACK_NAME[] = "SparkCellRadar";
 GAUGE_CALLBACK gauge_callback;
 void RadarPanelCallbackInit();
 void RadarPanelCallbackDeInit();
@@ -58,9 +58,6 @@ void RadarPanelCallbackInit()
     if (pRadarPanelCallback)
     {
         auto b = P3D::PdkServices::GetPanelSystem()->PanelRegisterCCallback(RADAR_CALLBACK_NAME, pRadarPanelCallback);
-        auto cb = P3D::PdkServices::GetPanelSystem()->PanelGetRegisteredCCallback(RADAR_CALLBACK_NAME);
-        auto abcb = cb->CreateAircraftCCallback(13131313);
-        auto accb =  P3D::PdkServices::GetPanelSystem()->PanelGetAircraftCCallback(RADAR_CALLBACK_NAME);
         pRadarPanelCallback->Release();
     }
 }

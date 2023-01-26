@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<SimBase.Document Type="AddOnXml" version="4,1" id="add-on">
+    <AddOn.Name>SparkCellRadar</AddOn.Name>
+    <AddOn.Description>SparkCell Radar.</AddOn.Description>
+    <AddOn.Component>
+        <Category>Gauges</Category>
+        <Path>Gauges</Path>
+    </AddOn.Component>
+    <AddOn.Component>
+        <Category>DLL</Category>
+        <Disabled>False</Disabled>
+        <ManualLoad>False</ManualLoad>
+        <Path>SparkCellRadar.dll</Path>
+        <DLLType>PDK</DLLType>
+        <DllStartName>module_init</DllStartName>
+        <DllStopName>module_deinit</DllStopName>
+    </AddOn.Component>
+</SimBase.Document>

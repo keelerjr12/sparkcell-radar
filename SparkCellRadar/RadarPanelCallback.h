@@ -5,7 +5,7 @@
 
 class RadarPanelCallback : public IPanelCCallback {
 public:
-	RadarPanelCallback() : m_RefCount(1) { }
+	RadarPanelCallback();
 
 	virtual IPanelCCallback* QueryInterface(LPCSTR pszInterface) override;
 
@@ -20,7 +20,6 @@ public:
 	virtual bool GetPropertyUnits(SINT32 id, ENUM* pEnum) override;
 
 private:
-
 	DECLARE_PANEL_CALLBACK_REFCOUNT(RadarPanelCallback);
 };
 

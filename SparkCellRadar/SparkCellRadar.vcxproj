@@ -109,7 +109,7 @@
       <ConformanceMode>Default</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>C:\Program Files\Lockheed Martin\Prepar3D v5 SDK 5.3.17.28160\inc\SimConnect\;C:\Program Files\Lockheed Martin\Prepar3D v5 SDK 5.3.17.28160\inc\PDK\;C:\Program Files\Lockheed Martin\Prepar3D v5 SDK 5.3.17.28160\inc\PDK\Helpers\;C:\Program Files\Lockheed Martin\Prepar3D v5 SDK 5.3.17.28160\inc\Gauges\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <CallingConvention>StdCall</CallingConvention>
+      <CallingConvention>Cdecl</CallingConvention>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
