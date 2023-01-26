@@ -33,13 +33,10 @@ void RadarGaugeCallback::Update()
 	CComPtr<P3D::IBaseObjectV400> spUserObject;
 	if (SUCCEEDED(P3D::PdkServices::GetSimObjectManager()->GetUserObject(&spUserObject))) {
 		double val = 0.0;
+		auto userId = spUserObject->GetId();
 
 		for (auto prop : gAircraftProperties)
 		{
-			if (SUCCEEDED(spUserObject->GetProperty(prop.szPropertyName, prop.units, val))) {
-				std::cout << val << std::endl;
-			}
-
 			spUserObject->GetProperty(L"PLANE LATITUDE", L"Degrees", val);
 			auto latitude = val;
 			spUserObject->GetProperty(L"PLANE LONGITUDE", L"Degrees", val);
@@ -48,15 +45,29 @@ void RadarGaugeCallback::Update()
 			auto altitude = val;
 
 			P3D::P3DDXYZ latLongAlt = { latitude, longitude, altitude };
-			UINT32 nObjects;
+			std::cout << "USER OBJECT: \n";
+			std::cout << userId << ", " << latLongAlt.dX << ", " << latLongAlt.dY << ", " << latLongAlt.dZ << std::endl;
+
+			UINT32 nObjects = 100;
 			UINT idArr[100];
-			P3D::PdkServices::GetSimObjectManager()->GetObjectsInRadius(latLongAlt, 120000, nObjects, idArr);
+			P3D::PdkServices::GetSimObjectManager()->GetObjectsInRadius(latLongAlt, 6000*40, nObjects, idArr);
 
-			std::cout << latLongAlt.dX << ", " << latLongAlt.dY << ", " << latLongAlt.dZ << std::endl;
+			for (auto i = 0; i < nObjects; ++i) {
+				auto objId = idArr[i];
+				CComPtr<P3D::IBaseObjectV400> aiObject;
+				if (SUCCEEDED(P3D::PdkServices::GetSimObjectManager()->GetObjectW(objId, &aiObject))) {
+					aiObject->GetProperty(L"PLANE LATITUDE", L"Degrees", val);
+					auto latitude = val;
+					aiObject->GetProperty(L"PLANE LONGITUDE", L"Degrees", val);
+					auto longitude = val;
+					aiObject->GetProperty(L"PLANE ALTITUDE", L"Feet", val);
+					auto altitude = val;
 
-			for (auto i = 0; i < 100; ++i)
-				std::cout << idArr[i] << " ";
-			std::cout << std::endl;
+					P3D::P3DDXYZ latLongAlt = { latitude, longitude, altitude };
+					std::cout << "OTHER OBJ: \n";
+					std::cout << objId << ", " << latLongAlt.dX << ", " << latLongAlt.dY << ", " << latLongAlt.dZ << std::endl;
+				}
+			}
 		}
 	}
 }

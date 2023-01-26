@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<SimBase.Document Type="ObjectFile" version="5,3">
+    <Descr>Prepar3D default scenario. On the runway at Randolph AFB.</Descr>
+    <Title>Prepar3D Default</Title>
+    <WorldBase.Flight>
+        <SimContain.UserOwnship InstanceId="{1CCF6D89-BA36-445F-B5C8-47571ABC0773}">
+            <SpeedKnots>350.000000</SpeedKnots>
+            <AltitudeIsAGL>False</AltitudeIsAGL>
+        </SimContain.UserOwnship>
+        <SimContain.UserAvatar InstanceId="{508FDC98-BF36-4C0F-B22D-27045DF1A0CF}">
+        </SimContain.UserAvatar>
+        <SimContain.Container InstanceId="{C34E94F3-FA34-4C16-9F01-57E166C90F1A}">
+            <Descr>Airplane1</Descr>
+            <AltitudeIsAGL>False</AltitudeIsAGL>
+            <ContainerID>0</ContainerID>
+            <IsOnGround>False</IsOnGround>
+            <WorldPosition>N29° 57' 22.060217",W98° 16' 5.338246",+020000.00</WorldPosition>
+            <Orientation>0.000000,0.000000,180.000019</Orientation>
+            <ContainerTitle>F-16</ContainerTitle>
+            <AIType>Airplane</AIType>
+            <AircraftAI>
+                <GroundCruiseSpeed>35.000000</GroundCruiseSpeed>
+                <GroundTurnSpeed>10.000000</GroundTurnSpeed>
+                <GroundTurnTime>3.500000</GroundTurnTime>
+                <YieldToUser>True</YieldToUser>
+                <AssignedHeading>180.000000</AssignedHeading>
+                <AssignedAltitude>60960.000000</AssignedAltitude>
+                <AssignedAirspeed>300.000000</AssignedAirspeed>
+                <CurrentWaypoint>0</CurrentWaypoint>
+            </AircraftAI>
+        </SimContain.Container>
+    </WorldBase.Flight>
+    <MissionBuilder.MissionBuilder>
+    </MissionBuilder.MissionBuilder>
+    <WorldBase.AreasOfInterest>
+    </WorldBase.AreasOfInterest>
+    <WorldBase.Waypoints>
+    </WorldBase.Waypoints>
+</SimBase.Document>
