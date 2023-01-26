@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="RadarPanelCallback.h">
+      <Filter>Header</Filter>
+    </ClCompile>
     <ClCompile Include="RadarAircraftCallback.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -16,7 +19,7 @@
     <ClCompile Include="SparkCellRadar.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="RadarPanelCallback.h">
+    <ClCompile Include="RadarTypes.h">
       <Filter>Header</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,11 +35,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Source">
-      <UniqueIdentifier>{161d708d-82f9-407a-9935-a26a812466dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header">
-      <UniqueIdentifier>{f664784c-6e39-40e5-aefe-e3f938a03be5}</UniqueIdentifier>
+      <UniqueIdentifier>{5a2cce06-0708-4f5d-a24b-055e87722904}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{f9567d72-854b-481b-83b1-c94b08a8a754}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

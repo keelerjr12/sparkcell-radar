@@ -3,6 +3,7 @@
 
 RadarGaugeDrawable::RadarGaugeDrawable(const IGaugeCDrawableCreateParameters* pParams)
 {
+
 }
 
 ULONG RadarGaugeDrawable::AddRef()
@@ -17,7 +18,7 @@ ULONG RadarGaugeDrawable::Release()
 
 FLAGS32 RadarGaugeDrawable::GetFlags()
 {
-    return FLAGS32();
+    return GAUGE_DRAWABLE_FLAGS::TAKES_DC;
 }
 
 void RadarGaugeDrawable::Update()

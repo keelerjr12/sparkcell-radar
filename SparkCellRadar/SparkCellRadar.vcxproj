@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="RadarAircraftCallback.cpp" />
+    <ClCompile Include="RadarTypes.h" />
     <ClCompile Include="SparkCellRadar.cpp" />
     <ClCompile Include="RadarGaugeCallback.cpp" />
     <ClCompile Include="RadarGaugeDrawable.cpp" />

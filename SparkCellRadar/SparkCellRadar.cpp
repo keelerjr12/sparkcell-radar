@@ -3,12 +3,11 @@
 #include "RadarPanelCallback.h"
 
 static const char RADAR_CALLBACK_NAME[] = "SparkCellRadar";
+
 GAUGE_CALLBACK gauge_callback;
+
 void RadarPanelCallbackInit();
 void RadarPanelCallbackDeInit();
-
-// The Panels pointer will get filled in during the loading process
-// if this DLL is listed in DLL.XML
 
 PPANELS Panels = NULL;
 

@@ -1,24 +1,16 @@
 #include "RadarPanelCallback.h"
 #include "RadarAircraftCallback.h"
+#include "RadarTypes.h"
 
-// Note: The items in the property table correspond to the indices that
-// will be returned in the Get/Set Property functions
-struct PROPERTY_TABLE
+static PropertyTable RADAR_PROPERTY_TABLE[] =
 {
-    PCSTRINGZ szPropertyName;
-    PCSTRINGZ szUnitsName;
-    ENUM units;
+    { "Radar",  "Number",   UNITS_UNKNOWN },
 };
 
-static PROPERTY_TABLE NAVIGATION_PROPERTY_TABLE[] =
+const PropertyTable* GetPropertyTable(UINT& uLength)
 {
-    { "Nav",                        "Number",       UNITS_UNKNOWN },
-};
-
-const PROPERTY_TABLE* GetPropertyTable(UINT& uLength)
-{
-	uLength = LENGTHOF(NAVIGATION_PROPERTY_TABLE);
-	return NAVIGATION_PROPERTY_TABLE;
+	uLength = LENGTHOF(RADAR_PROPERTY_TABLE);
+	return RADAR_PROPERTY_TABLE;
 }
 
 RadarPanelCallback::RadarPanelCallback() : m_RefCount(1) { 
@@ -26,9 +18,9 @@ RadarPanelCallback::RadarPanelCallback() : m_RefCount(1) {
 	for (int n = 0; n < 5; n++)
 	{
 		if (ImportTable.PANELSentry.fnptr != NULL &&
-			NAVIGATION_PROPERTY_TABLE[n].units == UNITS_UNKNOWN)
+			RADAR_PROPERTY_TABLE[n].units == UNITS_UNKNOWN)
 		{
-			NAVIGATION_PROPERTY_TABLE[n].units = get_units_enum(NAVIGATION_PROPERTY_TABLE[n].szUnitsName);
+			RADAR_PROPERTY_TABLE[n].units = get_units_enum(RADAR_PROPERTY_TABLE[n].szUnitsName);
 		}
 	}
 }
@@ -61,7 +53,7 @@ bool RadarPanelCallback::ConvertStringToProperty(LPCSTR keyword, SINT32* pID)
     }
 
     UINT uNumProperties;
-    const PROPERTY_TABLE* parPropertyTable = GetPropertyTable(uNumProperties);
+    const PropertyTable* parPropertyTable = GetPropertyTable(uNumProperties);
 
     for (UINT i = 0; i < uNumProperties; i++)
     {
@@ -82,7 +74,7 @@ bool RadarPanelCallback::ConvertPropertyToString(SINT32 id, LPCSTR* pKeyword)
     }
 
     UINT uNumProperties;
-    const PROPERTY_TABLE* parPropertyTable = GetPropertyTable(uNumProperties);
+    const PropertyTable* parPropertyTable = GetPropertyTable(uNumProperties);
 
     if (id < 0 || id >= (SINT32)uNumProperties)
     {
