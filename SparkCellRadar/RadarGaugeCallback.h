@@ -3,9 +3,14 @@
 
 #include <gauges.h>
 
+namespace SparkCell {
+	class Radar;
+}
+
 class RadarGaugeCallback : public IGaugeCCallback {
 public:
-	RadarGaugeCallback(UINT32 containerId) : m_RefCount(1), mContainerId(containerId) { }
+	RadarGaugeCallback(UINT32 containerId);
+	virtual ~RadarGaugeCallback();
 
 	virtual IGaugeCCallback* QueryInterface(LPCSTR pszInterface) override;
 	virtual void Update() override;
@@ -19,6 +24,7 @@ public:
 
 private:
 	UINT32 mContainerId;
+	SparkCell::Radar* mRadar;
 
 	DECLARE_PANEL_CALLBACK_REFCOUNT(RadarGaugeCallback);
 };

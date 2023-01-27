@@ -22,6 +22,9 @@
     <ClCompile Include="RadarTypes.h">
       <Filter>Header</Filter>
     </ClCompile>
+    <ClCompile Include="Radar.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RadarAircraftCallback.h">
@@ -31,6 +34,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="RadarGaugeDrawable.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Radar.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

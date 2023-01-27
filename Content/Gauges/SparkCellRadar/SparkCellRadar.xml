@@ -9,19 +9,19 @@
     <SimGauge.Gauge id="Gauge" ArtDirectory="C:\GaugeArt">
 	<FloatPosition>0.000,0.000</FloatPosition>
         <Element id="Map border">
-            <FloatPosition>6.000,7.000</FloatPosition>
+            <FloatPosition>30.000,30.000</FloatPosition>
             <Rectangle id="Rectangle">
                 <LineWidth>1</LineWidth>
                 <Bright>True</Bright>
-                <Width>386</Width>
-                <Height>386</Height>
+                <Width>200</Width>
+                <Height>200</Height>
                 <LineColor>0x808080</LineColor>
             </Rectangle>
         </Element>		
 	<Element>
-		<FloatPosition>8.000,8.000</FloatPosition>
+		<FloatPosition>30.000,30.000</FloatPosition>
 		<CustomDraw Name="SparkCellRadar:Radar">
-			<Size>382,382</Size>
+			<Size>200, 200</Size>
 			<CustomDrawParam id="Scale" Name="Scale">
 				<Value>80000</Value>
 			</CustomDrawParam>

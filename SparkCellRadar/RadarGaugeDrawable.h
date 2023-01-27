@@ -3,13 +3,17 @@
 
 #include <gauges.h>
 
+namespace SparkCell {
+	class Radar;
+}
+
 enum RadarGaugeDrawableId {
 	RADAR
 };
 
 class RadarGaugeDrawable : public IGaugeCDrawable {
 public:
-	RadarGaugeDrawable(const IGaugeCDrawableCreateParameters* pParams);
+	RadarGaugeDrawable(const IGaugeCDrawableCreateParameters* pParams, const SparkCell::Radar* const radar);
 
 	// Inherited via IGaugeCDrawable
 	virtual ULONG AddRef() override;
@@ -20,6 +24,9 @@ public:
 	virtual bool Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOINT size, HDC hdc, PIMAGE pImage) override;
 	virtual bool SetupDraw(PIXPOINT size, HDC hdc, PIMAGE pImage) override;
 	virtual bool GetDraw(IGaugeCDrawableDrawParameters* pParameters) override;
+
+private:
+	const SparkCell::Radar* const mRadar;
 };
 
 #endif // RADAR_GAUGE_DRAWABLE_H
