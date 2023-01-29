@@ -2,6 +2,7 @@
 #include <Pdk.h>
 #include <PdkServices.h>
 #include "Radar.h"
+#include "RadarTarget.h"
 #include "RadarTypes.h"
 #include "SimulatedRadarTypes.h"
 #include <algorithm>
@@ -45,67 +46,49 @@ Radar::PBH getPBH(const P3D::IBaseObjectV400& obj) {
 	obj.GetProperty(L"PLANE HEADING DEGREES TRUE", L"Degrees", heading);
 
 	return Radar::PBH{ pitch, bank, heading };
-
 }
 
-float calculateDistance(const Radar::LLA& lla_1, const Radar::LLA& lla_2) {
-	const auto phi_1 = lla_1.Lat * (std::numbers::pi / 180);
-	const auto phi_2 = lla_2.Lat * (std::numbers::pi / 180);
-	const auto phi_delta = (lla_2.Lat - lla_1.Lat) * (std::numbers::pi / 180);
-	const auto lambda_delta = (lla_2.Lon - lla_1.Lon) * (std::numbers::pi / 180);
+P3D::P3DDXYZ getVelocities(const P3D::IBaseObjectV400& obj) {
+	auto vx = 0.0;
+	obj.GetProperty(L"VELOCITY WORLD X", L"Knots", vx);
+	auto vy = 0.0;
+	obj.GetProperty(L"VELOCITY WORLD Y", L"Knots", vy);
+	auto vz = 0.0;
+	obj.GetProperty(L"VELOCITY WORLD Z", L"Knots", vz);
 
-	const auto a = (sin(phi_delta / 2) * sin(phi_delta / 2)) + (cos(phi_1) * cos(phi_2) * sin(lambda_delta / 2) * sin(lambda_delta / 2));
-	const auto c = 2 * atan2(sqrt(a), sqrt(1 - a));
-
-	const auto R = 3440.1;
-	const float dist = R * c;
-
-	return dist;
+	return P3D::P3DDXYZ { vx, vy, vz };
 }
 
-float radians(float degs) {
-	return degs * std::numbers::pi / 180;
-}
+float calculateCATA(const SparkCell::RadarTarget& tgt, const P3D::P3DDXYZ A_VelVec, const Radar::PBH& B_PBH, const P3D::P3DDXYZ B_VelVec) {
+	/*const auto bearing = tgt.getBearing();
+	const auto vec = sin(radians(bearing - B_PBH.Heading));
 
-float degrees(float rads) {
-	return rads * 180 / std::numbers::pi;
-}
+	const auto A_vel = sqrt(A_VelVec.dX * A_VelVec.dX + A_VelVec.dY * A_VelVec.dY);
+	const auto B_vel = sqrt(B_VelVec.dX * B_VelVec.dX + B_VelVec.dY * B_VelVec.dY);
 
-float calculateBearing(const Radar::LLA& lla_1, const Radar::LLA& lla_2) {
-	const auto theta_1 = radians(lla_1.Lat);
-	const auto theta_2 = radians(lla_2.Lat);
-	const auto delta_1 = radians(lla_2.Lat - lla_1.Lat);
-	const auto delta_2 = radians(lla_2.Lon - lla_1.Lon);
+	const auto velRatio = A_vel / B_vel;
 
-	const auto y = sin(delta_2) * cos(theta_2);
-	const auto x = cos(theta_1) * sin(theta_2) - sin(theta_1) * cos(theta_2) * cos(delta_2);
-	auto brng = atan2(y, x);
+	const auto cataRad = asin(velRatio * vec);
+	const auto cataDeg = degrees(cataRad);
 
-	brng = degrees(brng);
-	brng = static_cast<int>(brng + 360) % 360;
-
-	return brng;
-}
-
-float calculateAON(const Radar::LLA& userLLA, const Radar::PBH& userPBH, const Radar::LLA& rhLLA) {
-	auto aon = static_cast<int>(calculateBearing(userLLA, rhLLA) - userPBH.Heading + 360) % 360;
-
-	if (aon > 180)
-		aon = aon - 360;
-
-	return aon;
+	return cataDeg;*/
+	return 0.f;
 }
 
 void SparkCell::Radar::Update() {
-	mRadarHits.clear();
+	mRadarTargets.clear();
 
 	CComPtr<P3D::IBaseObjectV400> spUserObject;
 	if (SUCCEEDED(P3D::PdkServices::GetSimObjectManager()->GetUserObject(&spUserObject))) {
-		auto userId = spUserObject->GetId();
+		CComPtr<P3D::IBaseObjectV400> spUserAvatar;
+		P3D::PdkServices::GetSimObjectManager()->GetUserAvatar(&spUserAvatar);
+
+		auto userObjectId = spUserObject->GetId();
+		auto userAvatarId = spUserAvatar->GetId();
+
 		auto userTelemetry = getTelemetryData(*spUserObject);
 		auto userPBH = getPBH(*spUserObject);
-
-		std::cout << userId << ", " << userTelemetry.Lat << ", " << userTelemetry.Lon << ", " << userTelemetry.Alt << ", " << userPBH.Heading << std::endl;
+		const auto userVelocities = getVelocities(*spUserObject);
 
 		UINT32 nObjects = 100;
 		UINT idArr[100];
@@ -113,19 +96,19 @@ void SparkCell::Radar::Update() {
 		P3D::PdkServices::GetSimObjectManager()->GetObjectsInRadius(dxyz, 6000*40, nObjects, idArr);
 
 		for (auto i = 0; i < nObjects; ++i) {
+
 			auto objId = idArr[i];
 			CComPtr<P3D::IBaseObjectV400> aiObject;
-			if ((objId != userId) && SUCCEEDED(P3D::PdkServices::GetSimObjectManager()->GetObjectW(objId, &aiObject))) {
-				std::cout << "OTHER OBJ: \n";
+
+			if ((objId != userObjectId) && (objId != userAvatarId) && SUCCEEDED(P3D::PdkServices::GetSimObjectManager()->GetObjectW(objId, &aiObject))) {
 				auto radarHitTelemetry = getTelemetryData(*aiObject);
-				std::cout << objId << ", " << radarHitTelemetry.Lat << ", " << radarHitTelemetry.Lon << ", " << radarHitTelemetry.Alt << std::endl;
+				auto radarHitPBH = getPBH(*aiObject);
+				const auto radarHitVelocities = getVelocities(*aiObject);
 
-				const auto brng = calculateBearing(userTelemetry, radarHitTelemetry);
-				const auto aon = calculateAON(userTelemetry, userPBH, radarHitTelemetry);
-				const auto dist = calculateDistance(userTelemetry, radarHitTelemetry);
+				const auto tgt = RadarTarget(userTelemetry, userPBH, radarHitTelemetry, radarHitPBH, radarHitVelocities);
 
-				std::cout << "brng: " << brng << ", aon: " << aon << "dist: " << dist << std::endl;
-				mRadarHits.push_back({aon, dist});
+				mRadarTargets.push_back(tgt);
+				mLockedTarget = &mRadarTargets.back();
 			}
 		}
 	}
@@ -139,6 +122,10 @@ float SparkCell::Radar::GetRange() const {
 	return 40.f;
 }
 
-std::vector<SparkCell::RadarHit> SparkCell::Radar::GetRadarHits() const {
-	return mRadarHits;
+std::vector<SparkCell::RadarTarget> SparkCell::Radar::GetRadarTargets() const {
+	return mRadarTargets;
+}
+
+const SparkCell::RadarTarget* const SparkCell::Radar::GetLockedTarget() const {
+	return mLockedTarget;
 }

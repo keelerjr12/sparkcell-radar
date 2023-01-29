@@ -1,14 +1,11 @@
 #ifndef RADAR_H
 #define RADAR_H
 
+#include "RadarTarget.h"
 #include <vector>
 
 namespace SparkCell {
 
-	struct RadarHit {
-		float bearing;
-		float range;
-	};
 
 	class Radar
 	{
@@ -18,10 +15,13 @@ namespace SparkCell {
 		virtual float GetAzimuth() const;
 		virtual float GetRange() const;
 
-		virtual std::vector<RadarHit> GetRadarHits() const;
+		virtual std::vector<RadarTarget> GetRadarTargets() const;
+		virtual const RadarTarget* const GetLockedTarget() const;
 
 	private:
-		std::vector<RadarHit> mRadarHits;
+		std::vector<RadarTarget> mRadarTargets;
+
+		RadarTarget* mLockedTarget = nullptr;
 	};
 
 }

@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Radar.cpp" />
     <ClCompile Include="RadarAircraftCallback.cpp" />
+    <ClCompile Include="RadarTarget.cpp" />
     <ClCompile Include="RadarTypes.h" />
     <ClCompile Include="SparkCellRadar.cpp" />
     <ClCompile Include="RadarGaugeCallback.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="RadarAircraftCallback.h" />
     <ClInclude Include="RadarGaugeCallback.h" />
     <ClInclude Include="RadarGaugeDrawable.h" />
+    <ClInclude Include="RadarTarget.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Radar_Def.def" />
