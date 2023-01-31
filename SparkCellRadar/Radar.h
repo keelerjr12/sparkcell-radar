@@ -12,8 +12,9 @@ namespace SparkCell {
 	public:
 		virtual void Update();
 
-		virtual float GetAzimuth() const;
-		virtual float GetRange() const;
+		virtual int GetAzimuth() const;
+		virtual int GetElevation() const;
+		virtual int GetRange() const;
 
 		virtual std::vector<RadarTarget> GetRadarTargets() const;
 		virtual const RadarTarget* const GetLockedTarget() const;

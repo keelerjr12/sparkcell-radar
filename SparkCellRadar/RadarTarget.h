@@ -3,15 +3,18 @@
 
 #include <Pdk.h>
 #include <SimulatedRadarTypes.h>
+#include "Aircraft.h"
 
 namespace SparkCell {
 
 	class RadarTarget
 	{
 	public:
-		RadarTarget(const ::Radar::LLA& radarLLA, const ::Radar::PBH& radarPBH, const ::Radar::LLA& tgtLLA, const ::Radar::PBH& tgtPBH, const P3D::P3DDXYZ& tgtVel);
+		RadarTarget(const Aircraft& host, const Aircraft& tgt);
 
-		float getAirspeed() const;
+		float getAirspeed() const { return mTarget.airspeed(); }
+		float getAltitude() const { return mTarget.alt(); }
+
 		float getBearing() const;
 		float getRange() const;
 		float getHeading() const;
@@ -21,12 +24,8 @@ namespace SparkCell {
 
 	private:
 
-		::Radar::LLA mRadarLLA;
-		::Radar::PBH mRadarPBH;
-
-		::Radar::LLA mTgtLLA;
-		::Radar::PBH mTgtPBH;
-		P3D::P3DDXYZ mTgtVel;
+		Aircraft mHost;
+		Aircraft mTarget;
 	};
 
 }
