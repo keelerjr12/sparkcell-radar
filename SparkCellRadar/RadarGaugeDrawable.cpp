@@ -2,9 +2,12 @@
 #include "Radar.h"
 #include <gdiplus.h>
 #include <iostream>
+#include <fstream>
+#include <memory>
 #include <string>
 
-RadarGaugeDrawable::RadarGaugeDrawable(const IGaugeCDrawableCreateParameters* pParams, const SparkCell::Radar* const radar) : mRadar(radar) {
+
+RadarGaugeDrawable::RadarGaugeDrawable(const IGaugeCDrawableCreateParameters* pParams, const SparkCell::Radar* const radar) : mRadar(radar), vd(std::unique_ptr<VirtualDisplay>(nullptr)) {
 }
 
 ULONG RadarGaugeDrawable::AddRef()
@@ -33,99 +36,75 @@ void RadarGaugeDrawable::Show(bool on)
 
 bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOINT size, HDC hdc, PIMAGE pImage)
 {
-    Gdiplus::Graphics graphics(hdc);
-    graphics.Clear(Gdiplus::Color::Transparent);
+    if (!vd) {
+        vd = std::make_unique<VirtualDisplay>(hdc, size.x, size.y);
+    }
 
-	Gdiplus::FontFamily  fontFamily(L"Times New Roman");
-	Gdiplus::SolidBrush  solidBrush(Gdiplus::Color(255, 255, 255, 255));
+    vd->Clear();
 
-    // Render range label
-	Gdiplus::Font        rngFont(&fontFamily, 14, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel);
-	Gdiplus::PointF      rngLblPoint(size.x * .02, size.y * .275);
+    vd->SetFontSize(size.x * .0371);
+    vd->DrawString(L"CRM", .129, 0);
+    vd->DrawString(L"RWS", .3, 0);
+    vd->DrawString(L"NORM", .471, 0);
+    vd->DrawString(L"OVRD", .642, 0);
+    vd->DrawString(L"CNTL", .813, 0);
+    
+
 	const auto range = std::to_wstring(mRadar->GetRange());
-	graphics.DrawString(range.c_str(), -1, &rngFont, rngLblPoint, &solidBrush);
+    vd->DrawString(range, .02, .275);
 
-    // Render azimuth label
-	Gdiplus::Font        azFont(&fontFamily, 14, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel);
+	//Gdiplus::PointF      aLblPoint(size.x * .02, size.y / 2 - font_sz);
+	//graphics.DrawString(L"A", -1, &azFont, aLblPoint, &solidBrush);
+    //vd->DrawString(graphics, L"A", .02, .275);
+
 	const auto azLbl = std::to_wstring(mRadar->GetAzimuth() / 10);
-
-	Gdiplus::PointF      aLblPoint(size.x * .02, size.y / 2 - 14);
-	graphics.DrawString(L"A", -1, &azFont, aLblPoint, &solidBrush);
-
-	Gdiplus::PointF      azLblPoint(size.x * .02, size.y / 2);
-	graphics.DrawString(azLbl.c_str(), -1, &azFont, azLblPoint, &solidBrush);
+    vd->DrawString(azLbl, .02, .5);
 
     // Render locked target params
     if (mRadar->GetLockedTarget()) {
-        Gdiplus::Font        tgtFont(&fontFamily, 14, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel);
-
-        Gdiplus::PointF      aaPoint(size.x * .034, size.y * .03);
         const auto aspect = std::to_wstring(static_cast<int>(mRadar->GetLockedTarget()->getAA()) / 10); // TODO: this should actuall be rounded
-        graphics.DrawString(aspect.c_str(), -1, &tgtFont, aaPoint, &solidBrush);
+        vd->DrawString(aspect, .094, .0514);
 
-        Gdiplus::PointF      trkPoint(size.x * .204, size.y * .03);
         const auto track = std::to_wstring(static_cast<int>(mRadar->GetLockedTarget()->getHeading())); // TODO: this should actuall be rounded to nearest 10
-        graphics.DrawString(track.c_str(), -1, &tgtFont, trkPoint, &solidBrush);
+        vd->DrawString(track, .171, .0514);
 
-        Gdiplus::PointF      asPoint(size.x * (1-.25), size.y * .03);
         const auto airspeed = std::to_wstring(static_cast<int>(mRadar->GetLockedTarget()->getAirspeed())); // TODO: this should actuall be rounded to nearest 10
-        graphics.DrawString(airspeed.c_str(), -1, &tgtFont, asPoint, &solidBrush);
+        vd->DrawString(airspeed, .643, .0514);
     }
 
     // Render azimuth scale
-    Gdiplus::SolidBrush  azBrush(Gdiplus::Color::White);
-    Gdiplus::Pen azPen(&azBrush, 1.0F);
-
-    auto pxPerTenDegs = size.y / (2 * mRadar->GetAzimuth() / 10);
     auto nTicks = (mRadar->GetAzimuth() / 10) / 2;
-
-    auto startPx = size.x / 2;
-    const auto bottomPx = size.y * (1 - .092);
-    const auto topPx = size.y * (1 - .127);
-    graphics.DrawLine(&azPen, Gdiplus::Point(startPx, bottomPx), Gdiplus::Point(startPx, topPx - 5));
+    vd->DrawLine(.5, .86, .5, .9086);
 
     for (auto tick = 1; tick <= nTicks; ++tick) {
-        graphics.DrawLine(&azPen, Gdiplus::Point(startPx + pxPerTenDegs * tick, bottomPx), Gdiplus::Point(startPx + pxPerTenDegs * tick, topPx));
-        graphics.DrawLine(&azPen, Gdiplus::Point(startPx - pxPerTenDegs * tick, bottomPx), Gdiplus::Point(startPx - pxPerTenDegs * tick, topPx));
+        vd->DrawLine(.5 + tick * .083333 , .8772, .5 + tick * .083333, .9086);
+        vd->DrawLine(.5 - tick * .083333 , .8772, .5 - tick * .083333, .9086);
     }
 
     // Render elevation scale
-    Gdiplus::SolidBrush  elBrush(Gdiplus::Color::White);
-
-    Gdiplus::Pen elPen(&elBrush, 1.0F);
-    pxPerTenDegs = size.y / (2 * mRadar->GetElevation() / 10);
+    const auto pxPerTenDegs = size.y / (2 * mRadar->GetElevation() / 10);
     nTicks = (mRadar->GetElevation() / 10) / 2;
-
-    startPx = size.y / 2;
-    const auto leftPx = size.x * .092;
-    const auto rightPx = size.y * .127;
-    graphics.DrawLine(&elPen, Gdiplus::Point(leftPx, startPx), Gdiplus::Point(rightPx+5, startPx));
+    vd->DrawLine(.0914, .5, .14, .5);
 
     for (auto tick = 1; tick <= nTicks; ++tick) {
-        graphics.DrawLine(&elPen, Gdiplus::Point(leftPx, startPx + pxPerTenDegs * tick), Gdiplus::Point(rightPx, startPx + pxPerTenDegs * tick));
-        graphics.DrawLine(&elPen, Gdiplus::Point(leftPx, startPx - pxPerTenDegs * tick), Gdiplus::Point(rightPx, startPx - pxPerTenDegs * tick));
+        vd->DrawLine(.0914, .5 + tick * .083333 , .1228, .5 + tick * .083333);
+        vd->DrawLine(.0914, .5 - tick * .083333 , .1228, .5 - tick * .083333);
     }
 
     // Render targets
-    auto width = 10.0;
-    auto height = 10.0;
-    Gdiplus::SolidBrush brush(Gdiplus::Color::White);
-
-    auto pixelsPerAzDeg = size.x / (2 * mRadar->GetAzimuth());
-    auto pixelsPerRngMile = size.y / mRadar->GetRange();
+    const auto width = .0315;
+    const auto height =.0315;
 
     auto targets = mRadar->GetRadarTargets();
 
     for (const auto& target : targets) {
-        Gdiplus::REAL x = ((size.x - width) / 2.0) + (target.getATA() * pixelsPerAzDeg);
-        Gdiplus::REAL y = ((mRadar->GetRange() - target.getRange()) * pixelsPerRngMile) - (height / 2.0);
-		graphics.FillRectangle(&brush, x, y, width, height);
+        auto x = (target.getATA() / (2 * mRadar->GetAzimuth())) + .5 - (width / 2.0);
+        auto y = 1 - (target.getRange() / mRadar->GetRange()) - (height / 2.0);
+        vd->DrawRect(x, y, width, height);
 
         // alt label per target
         const auto altitude = std::to_wstring(static_cast<int>(target.getAltitude() / 1000));
-		Gdiplus::Font        altFont(&fontFamily, 10, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel);
-		Gdiplus::PointF      altLblPt(x, y + 10);
-        graphics.DrawString(altitude.c_str(), -1, &altFont, altLblPt, &solidBrush);
+        vd->DrawString(altitude, x, y + .0486);
     }
 
     return true;

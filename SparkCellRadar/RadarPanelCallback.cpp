@@ -15,7 +15,7 @@ const PropertyTable* GetPropertyTable(UINT& uLength)
 
 RadarPanelCallback::RadarPanelCallback() : m_RefCount(1) { 
 	// init property table
-	for (int n = 0; n < 5; n++)
+	for (int n = 0; n < 1; n++)
 	{
 		if (ImportTable.PANELSentry.fnptr != NULL &&
 			RADAR_PROPERTY_TABLE[n].units == UNITS_UNKNOWN)

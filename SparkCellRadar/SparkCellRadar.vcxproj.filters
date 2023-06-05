@@ -25,6 +25,12 @@
     <ClCompile Include="Radar.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Aircraft.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RadarTarget.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RadarAircraftCallback.h">
@@ -39,6 +45,12 @@
     <ClInclude Include="Radar.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Aircraft.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RadarTarget.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">
@@ -49,8 +61,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Radar_Def.def">
-      <Filter>Source</Filter>
-    </None>
+    <None Include="Radar_Def.def" />
   </ItemGroup>
 </Project>
