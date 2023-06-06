@@ -6,6 +6,20 @@
 #include <memory>
 #include <string>
 
+#include <iostream>
+
+enum class HJustify {
+	LEFT,
+	CENTER,
+	RIGHT
+};
+
+enum class VJustify {
+	TOP,
+	CENTER,
+	BOTTOM
+};
+
 class VirtualDisplay {
 
  public: 
@@ -21,11 +35,34 @@ class VirtualDisplay {
 		m_graphics.Clear(Gdiplus::Color::Transparent);
 	}
 
-    void DrawString(std::wstring txt, float x_pos, float y_pos) {
-        Gdiplus::PointF pt{ x_pos * m_x_sz, y_pos * m_y_sz };
-	    Gdiplus::SolidBrush  solidBrush(Gdiplus::Color(255, 255, 255, 255));
+	void DrawString(std::wstring txt, float x_pos, float y_pos, HJustify h_just = HJustify::LEFT, VJustify v_just = VJustify::TOP) {
 
-        m_graphics.DrawString(txt.c_str(), -1, m_fnt.get(), pt, &solidBrush);
+		auto x_px = x_pos * m_x_sz;
+		auto y_px = y_pos * m_y_sz;
+
+		Gdiplus::RectF box;
+		m_graphics.MeasureString(txt.c_str(), txt.size(), m_fnt.get(), {0, 0}, &box);
+		
+		switch (h_just) {
+		case HJustify::CENTER:
+			x_px -= box.Width / 2;
+			break;
+		case HJustify::RIGHT:
+			x_px -= box.Width;
+			break;
+		};
+
+		switch (v_just) {
+		case VJustify::CENTER:
+			y_px -= box.Height / 2;
+			break;
+		case VJustify::BOTTOM:
+			y_px -= box.Height;
+			break;
+		};
+
+	    Gdiplus::SolidBrush  solidBrush(Gdiplus::Color(255, 255, 255, 255));
+        m_graphics.DrawString(txt.c_str(), -1, m_fnt.get(), {x_px, y_px}, &solidBrush);
     }
 
 	void DrawLine(float x1, float y1, float x2, float y2) {

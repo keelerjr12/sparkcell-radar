@@ -1,9 +1,11 @@
 #include "RadarGaugeDrawable.h"
 #include "Radar.h"
+#include <cmath>
+#include <fstream>
 #include <gdiplus.h>
 #include <iostream>
-#include <fstream>
 #include <memory>
+#include <numbers>
 #include <string>
 
 
@@ -43,11 +45,17 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     vd->Clear();
 
     vd->SetFontSize(size.x * .0371);
-    vd->DrawString(L"CRM", .129, 0);
-    vd->DrawString(L"RWS", .3, 0);
-    vd->DrawString(L"NORM", .471, 0);
-    vd->DrawString(L"OVRD", .642, 0);
-    vd->DrawString(L"CNTL", .813, 0);
+    vd->DrawString(L"CRM", .16667, 0, HJustify::CENTER);
+    vd->DrawString(L"RWS", .33333, 0, HJustify::CENTER);
+    vd->DrawString(L"NORM", .5, 0, HJustify::CENTER);
+    vd->DrawString(L"OVRD", .66667, 0, HJustify::CENTER);
+    vd->DrawString(L"CNTL", .83333, 0, HJustify::CENTER);
+
+    vd->DrawString(L"SWAP", .16667, 1, HJustify::CENTER, VJustify::BOTTOM);
+    vd->DrawString(L"FCR", .33333, 1, HJustify::CENTER, VJustify::BOTTOM);
+    vd->DrawString(L"HSD", .5, 1, HJustify::CENTER, VJustify::BOTTOM);
+    vd->DrawString(L"WPN", .66667, 1, HJustify::CENTER, VJustify::BOTTOM);
+    vd->DrawString(L"DCLT", .83333, 1, HJustify::CENTER, VJustify::BOTTOM);
     
 
 	const auto range = std::to_wstring(mRadar->GetRange());
@@ -91,6 +99,21 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
         vd->DrawLine(.0914, .5 - tick * .083333 , .1228, .5 - tick * .083333);
     }
 
+    // Render horizon line
+    const auto bank_angle = 45 * std::numbers::pi / 180;
+    const auto max_wg_len = .25;
+    const auto init_wg_len = .04;
+    const auto x1_offset = max_wg_len * std::cosf(bank_angle);
+    const auto y1_offset = max_wg_len * std::sinf(bank_angle);
+    const auto x2_offset = init_wg_len * std::cosf(bank_angle);
+    const auto y2_offset = init_wg_len * std::sinf(bank_angle);
+
+    const auto x1 = .5 - x1_offset;
+    const auto y1 = .5 - y1_offset;
+    const auto x2 = .5 - x2_offset;
+    const auto y2 = .5 - y2_offset;
+    vd->DrawLine(x1, y1, x2, y2);
+
     // Render targets
     const auto width = .0315;
     const auto height =.0315;
@@ -104,7 +127,7 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
 
         // alt label per target
         const auto altitude = std::to_wstring(static_cast<int>(target.getAltitude() / 1000));
-        vd->DrawString(altitude, x, y + .0486);
+        vd->DrawString(altitude, x + width / 2, y + .0486, HJustify::CENTER);
     }
 
     return true;
