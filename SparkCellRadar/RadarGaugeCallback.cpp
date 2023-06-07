@@ -1,9 +1,10 @@
 #include "RadarGaugeCallback.h"
+#include "Aircraft.h"
 #include "gauges.h"
 #include "Radar.h"
 #include "RadarGaugeDrawable.h"
 
-RadarGaugeCallback::RadarGaugeCallback(UINT32 containerId) : m_RefCount(1), mContainerId(containerId), mRadar(new SparkCell::Radar()) { } 
+RadarGaugeCallback::RadarGaugeCallback(UINT32 containerId, const SparkCell::Aircraft& host) : m_RefCount(1), mContainerId(containerId), mRadar(new SparkCell::Radar(host)) { } 
 
 RadarGaugeCallback::~RadarGaugeCallback() {
 	delete mRadar;

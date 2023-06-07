@@ -6,11 +6,14 @@
 
 namespace SparkCell {
 
-
 	class Radar
 	{
 	public:
+		Radar(const Aircraft& host) : mHost(&host) { }
+
 		virtual void Update();
+
+		const Aircraft& Host() const { return *mHost; }
 
 		virtual int GetAzimuth() const;
 		virtual int GetElevation() const;
@@ -22,6 +25,7 @@ namespace SparkCell {
 	private:
 		std::vector<RadarTarget> mRadarTargets;
 
+		const Aircraft* mHost;
 		RadarTarget* mLockedTarget = nullptr;
 	};
 

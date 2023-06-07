@@ -1,11 +1,12 @@
 #ifndef RADAR_AIRCRAFT_CALLBACK_H
 #define RADAR_AIRCRAFT_CALLBACK_H
 
+#include "Aircraft.h"
 #include <gauges.h>
 
 class RadarAircraftCallback : public IAircraftCCallback {
 public:
-	RadarAircraftCallback(UINT32 containerId) : m_RefCount(1), mContainerId(containerId) { }
+	RadarAircraftCallback(UINT32 containerId);
 
 	virtual IAircraftCCallback* QueryInterface(LPCSTR pszInterface) override;
 
@@ -15,6 +16,8 @@ public:
 
 private:
 	UINT32 mContainerId;
+
+	SparkCell::Aircraft user_aircraft;
 
 	DECLARE_PANEL_CALLBACK_REFCOUNT(RadarAircraftCallback);
 };

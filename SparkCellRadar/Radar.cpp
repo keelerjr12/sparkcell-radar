@@ -31,19 +31,20 @@ void SparkCell::Radar::Update() {
 	mRadarTargets.clear();
 	mLockedTarget = nullptr;
 
-	CComPtr<P3D::IBaseObjectV400> spUserObject;
-	if (SUCCEEDED(P3D::PdkServices::GetSimObjectManager()->GetUserObject(&spUserObject))) {
+	//CComPtr<P3D::IBaseObjectV400> spUserObject;
+	//if (SUCCEEDED(P3D::PdkServices::GetSimObjectManager()->GetUserObject(&spUserObject))) {
 		CComPtr<P3D::IBaseObjectV400> spUserAvatar;
 		P3D::PdkServices::GetSimObjectManager()->GetUserAvatar(&spUserAvatar);
 
-		auto userObjectId = spUserObject->GetId();
+		//auto userObjectId = spUserObject->GetId();
 		auto userAvatarId = spUserAvatar->GetId();
+		auto userObjectId = mHost->id();
 
-		auto radarAircraft = Aircraft(spUserObject);
+		//auto radarAircraft = Aircraft(spUserObject);
 
 		UINT32 nObjects = 100;
 		UINT idArr[100];
-		P3D::P3DDXYZ dxyz{ radarAircraft.lat(), radarAircraft.lon(), radarAircraft.alt()};
+		P3D::P3DDXYZ dxyz{ mHost->lat(), mHost->lon(), mHost->alt()};
 		P3D::PdkServices::GetSimObjectManager()->GetObjectsInRadius(dxyz, 6000*40, nObjects, idArr);
 
 		for (auto i = 0; i < nObjects; ++i) {
@@ -53,14 +54,14 @@ void SparkCell::Radar::Update() {
 
 			if ((objId != userObjectId) && (objId != userAvatarId) && SUCCEEDED(P3D::PdkServices::GetSimObjectManager()->GetObjectW(objId, &aiObject))) {
 				const auto targetAircraft = Aircraft(aiObject);
-				const auto tgt = RadarTarget(radarAircraft, targetAircraft);
+				const auto tgt = RadarTarget(*mHost, targetAircraft);
 
 				if (abs(tgt.getATA()) <= GetAzimuth()) {
 					mRadarTargets.push_back(tgt);
 					mLockedTarget = &mRadarTargets.back();
 				}
 			}
-		}
+		//}
 	}
 }
 

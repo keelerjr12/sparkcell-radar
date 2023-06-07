@@ -4,12 +4,13 @@
 #include <gauges.h>
 
 namespace SparkCell {
+	class Aircraft;
 	class Radar;
 }
 
 class RadarGaugeCallback : public IGaugeCCallback {
 public:
-	RadarGaugeCallback(UINT32 containerId);
+	RadarGaugeCallback(UINT32 containerId, const SparkCell::Aircraft& aircraft);
 	virtual ~RadarGaugeCallback();
 
 	virtual IGaugeCCallback* QueryInterface(LPCSTR pszInterface) override;

@@ -8,7 +8,12 @@ namespace SparkCell {
 	class Aircraft
 	{
 	public:
+		Aircraft() { }
 		Aircraft(const CComPtr<P3D::IBaseObjectV400>& obj);
+
+		void Update(const CComPtr<P3D::IBaseObjectV400>& obj);
+
+		int id() const;
 
 		float lat() const;
 		float lon() const;

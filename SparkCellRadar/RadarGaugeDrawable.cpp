@@ -99,20 +99,36 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
         vd->DrawLine(.0914, .5 - tick * .083333 , .1228, .5 - tick * .083333);
     }
 
-    // Render horizon line
-    const auto bank_angle = 45 * std::numbers::pi / 180;
-    const auto max_wg_len = .25;
-    const auto init_wg_len = .04;
-    const auto x1_offset = max_wg_len * std::cosf(bank_angle);
-    const auto y1_offset = max_wg_len * std::sinf(bank_angle);
-    const auto x2_offset = init_wg_len * std::cosf(bank_angle);
-    const auto y2_offset = init_wg_len * std::sinf(bank_angle);
+    // Render range scale
+    vd->DrawLine(.966, .75, 1, .75);
+    vd->DrawLine(.966, .5, 1, .5);
+    vd->DrawLine(.966, .25, 1, .25);
 
-    const auto x1 = .5 - x1_offset;
-    const auto y1 = .5 - y1_offset;
-    const auto x2 = .5 - x2_offset;
-    const auto y2 = .5 - y2_offset;
-    vd->DrawLine(x1, y1, x2, y2);
+
+    // Render horizon line
+
+    Gdiplus::Matrix rot_mat(.04, .25, 0, 0, 0, 0);
+    rot_mat.RotateAt(-1*mRadar->Host().bank(), { 0, 0 });
+    Gdiplus::REAL rot_mat_els[6] = {};
+    rot_mat.GetElements(rot_mat_els);
+
+    Gdiplus::Matrix outer_rot_mat(.25, .25, 0, -.03, 0, 0);
+    outer_rot_mat.RotateAt(-1*mRadar->Host().bank(), { 0, 0 });
+    Gdiplus::REAL outer_rot_mat_els[6] = {};
+    outer_rot_mat.GetElements(outer_rot_mat_els);
+
+
+    vd->DrawLine(.5 - rot_mat_els[0], .5 - rot_mat_els[2], .5 - rot_mat_els[1], .5 - rot_mat_els[3]);
+   // vd->DrawLine(.5 + rot_mat_els[0], .5 - rot_mat_els[2], .5 + rot_mat_els[1], .5 - rot_mat_els[3]);
+
+    vd->DrawLine(.5 - outer_rot_mat_els[0], .5 - outer_rot_mat_els[2], .5 - outer_rot_mat_els[1], .5 - outer_rot_mat_els[3]);
+    //vd->DrawLine(.5 + x1_offset, .5 + y1_offset, .5 + x2_offset, .5 + y2_offset);
+
+    Gdiplus::Matrix t_rot_mat{ 1, 0, 0, 1, 0, 0};
+    t_rot_mat.RotateAt(90, { .5, .5 });
+    Gdiplus::REAL t_rot_mat_els[6] = {};
+    t_rot_mat.GetElements(t_rot_mat_els);
+
 
     // Render targets
     const auto width = .0315;

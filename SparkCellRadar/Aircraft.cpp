@@ -7,6 +7,14 @@ namespace SparkCell {
 
 	}
 
+	void Aircraft::Update(const CComPtr<P3D::IBaseObjectV400>& obj) {
+		mObj = obj;
+	}
+
+	int Aircraft::id() const {
+		return mObj->GetId();
+	}
+
 	float Aircraft::lat() const {
 		auto lat = 0.0;
 		mObj->GetProperty(L"PLANE LATITUDE", L"Degrees", lat);
