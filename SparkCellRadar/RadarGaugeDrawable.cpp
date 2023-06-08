@@ -45,28 +45,28 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     vd->Clear();
 
     vd->SetFontSize(size.x * .0371);
-    vd->DrawString(L"CRM", .16667, 0, HJustify::CENTER);
-    vd->DrawString(L"RWS", .33333, 0, HJustify::CENTER);
-    vd->DrawString(L"NORM", .5, 0, HJustify::CENTER);
-    vd->DrawString(L"OVRD", .66667, 0, HJustify::CENTER);
-    vd->DrawString(L"CNTL", .83333, 0, HJustify::CENTER);
+    vd->DrawString(L"CRM", -.66667, 1, HJustify::CENTER);
+    vd->DrawString(L"RWS", -.33333, 1, HJustify::CENTER);
+    vd->DrawString(L"NORM", 0, 1, HJustify::CENTER);
+    vd->DrawString(L"OVRD", .33333, 1, HJustify::CENTER);
+    vd->DrawString(L"CNTL", .66667, 1, HJustify::CENTER);
 
-    vd->DrawString(L"SWAP", .16667, 1, HJustify::CENTER, VJustify::BOTTOM);
-    vd->DrawString(L"FCR", .33333, 1, HJustify::CENTER, VJustify::BOTTOM);
-    vd->DrawString(L"HSD", .5, 1, HJustify::CENTER, VJustify::BOTTOM);
-    vd->DrawString(L"WPN", .66667, 1, HJustify::CENTER, VJustify::BOTTOM);
-    vd->DrawString(L"DCLT", .83333, 1, HJustify::CENTER, VJustify::BOTTOM);
+    vd->DrawString(L"SWAP", -.66667,  -1, HJustify::CENTER, VJustify::BOTTOM);
+    vd->DrawString(L"FCR", -.33333,  -1, HJustify::CENTER, VJustify::BOTTOM);
+    vd->DrawString(L"HSD",  0, -1, HJustify::CENTER, VJustify::BOTTOM);
+    vd->DrawString(L"WPN", .33333, -1, HJustify::CENTER, VJustify::BOTTOM);
+    vd->DrawString(L"DCLT", .66667, -1, HJustify::CENTER, VJustify::BOTTOM);
     
 
 	const auto range = std::to_wstring(mRadar->GetRange());
-    vd->DrawString(range, .02, .275);
+    vd->DrawString(range, -.96, .45, HJustify::CENTER, VJustify::CENTER);
 
 	//Gdiplus::PointF      aLblPoint(size.x * .02, size.y / 2 - font_sz);
 	//graphics.DrawString(L"A", -1, &azFont, aLblPoint, &solidBrush);
     //vd->DrawString(graphics, L"A", .02, .275);
 
 	const auto azLbl = std::to_wstring(mRadar->GetAzimuth() / 10);
-    vd->DrawString(azLbl, .02, .5);
+    vd->DrawString(azLbl, -.96, 0, HJustify::CENTER, VJustify::CENTER);
 
     // Render locked target params
     if (mRadar->GetLockedTarget()) {
@@ -82,17 +82,17 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
 
     // Render azimuth scale
     auto nTicks = (mRadar->GetAzimuth() / 10) / 2;
-    vd->DrawLine(.5, .86, .5, .9086);
+    vd->DrawLine(0, -.72, 0, -.8172);
 
     for (auto tick = 1; tick <= nTicks; ++tick) {
-        vd->DrawLine(.5 + tick * .083333 , .8772, .5 + tick * .083333, .9086);
-        vd->DrawLine(.5 - tick * .083333 , .8772, .5 - tick * .083333, .9086);
+        vd->DrawLine(tick * .16667 , -.7554, tick * .16667, -.8172);
+        vd->DrawLine(-1 * tick * .16667 , -.7554, -1 * tick * .16667, -.8172);
     }
 
     // Render elevation scale
     const auto pxPerTenDegs = size.y / (2 * mRadar->GetElevation() / 10);
     nTicks = (mRadar->GetElevation() / 10) / 2;
-    vd->DrawLine(.0914, .5, .14, .5);
+    vd->DrawLine(-.72, 0, -.8172, 0);
 
     for (auto tick = 1; tick <= nTicks; ++tick) {
         vd->DrawLine(.0914, .5 + tick * .083333 , .1228, .5 + tick * .083333);
@@ -124,11 +124,23 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     vd->DrawLine(.5 - outer_rot_mat_els[0], .5 - outer_rot_mat_els[2], .5 - outer_rot_mat_els[1], .5 - outer_rot_mat_els[3]);
     //vd->DrawLine(.5 + x1_offset, .5 + y1_offset, .5 + x2_offset, .5 + y2_offset);
 
-    Gdiplus::Matrix t_rot_mat{ 1, 0, 0, 1, 0, 0};
-    t_rot_mat.RotateAt(90, { .5, .5 });
-    Gdiplus::REAL t_rot_mat_els[6] = {};
-    t_rot_mat.GetElements(t_rot_mat_els);
+    Gdiplus::REAL tt[6] = {};
+    Gdiplus::Matrix a(0, 0, 0, 0, .25, .25);
 
+    Gdiplus::Matrix translation(1, 0, 0, 1, -.5, -.5);
+    a.Multiply(&translation, Gdiplus::MatrixOrderAppend);
+    a.GetElements(tt);
+
+    Gdiplus::Matrix rotation;
+    rotation.Rotate(45, Gdiplus::MatrixOrderAppend);
+
+    a.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
+    a.GetElements(tt);
+
+    Gdiplus::Matrix translation_inv(1, 0, 0, 1, .5, .5);
+    a.Multiply(&translation_inv, Gdiplus::MatrixOrderAppend);
+
+    a.GetElements(tt);
 
     // Render targets
     const auto width = .0315;

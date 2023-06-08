@@ -37,8 +37,8 @@ class VirtualDisplay {
 
 	void DrawString(std::wstring txt, float x_pos, float y_pos, HJustify h_just = HJustify::LEFT, VJustify v_just = VJustify::TOP) {
 
-		auto x_px = x_pos * m_x_sz;
-		auto y_px = y_pos * m_y_sz;
+		auto x_px = m_x_sz * (1 + x_pos) / 2;
+		auto y_px = m_y_sz * (1 - y_pos) / 2;
 
 		Gdiplus::RectF box;
 		m_graphics.MeasureString(txt.c_str(), txt.size(), m_fnt.get(), {0, 0}, &box);
@@ -66,17 +66,17 @@ class VirtualDisplay {
     }
 
 	void DrawLine(float x1, float y1, float x2, float y2) {
-		const auto x1_px = m_x_sz * x1;
-		const auto y1_px = m_y_sz * y1;
-		const auto x2_px = m_x_sz * x2;
-		const auto y2_px = m_y_sz * y2;
+		const auto x1_px = m_x_sz * (1 + x1) / 2;
+		const auto y1_px = m_y_sz * (1 - y1) / 2;
+		const auto x2_px = m_x_sz * (1 + x2) / 2;
+		const auto y2_px = m_y_sz * (1 - y2) / 2;
 
 		m_graphics.DrawLine(m_pen.get(), Gdiplus::Point(x1_px, y1_px), Gdiplus::Point(x2_px, y2_px));
 	}
 
 	void DrawRect(float x, float y, float width, float height) {
-		const auto x_px = m_x_sz * x;
-		const auto y_px = m_y_sz * y;
+		const auto x_px = m_x_sz * (1 + x) / 2;
+		const auto y_px = m_y_sz * (1 - y) / 2;
 		const auto w_px = m_x_sz * width;
 		const auto h_px = m_y_sz * height;
 
