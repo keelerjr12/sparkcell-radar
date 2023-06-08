@@ -59,6 +59,14 @@ void SparkCell::Radar::Update() {
 	}
 }
 
+void SparkCell::Radar::SlewRight() {
+	m_cursor_az = m_cursor_az + static_cast<int>(1.f / 18 * 20);
+}
+
+int SparkCell::Radar::GetCursorAzimuth() const {
+	return m_cursor_az;
+}
+
 int SparkCell::Radar::GetAzimuth() const {
 	return 60;
 }

@@ -13,11 +13,15 @@ namespace SparkCell {
 
 		virtual void Update();
 
+		void SlewRight();
+
 		const Aircraft& Host() const { return *mHost; }
 
 		virtual int GetAzimuth() const;
 		virtual int GetElevation() const;
 		virtual int GetRange() const;
+
+		int GetCursorAzimuth() const;
 
 		virtual std::vector<RadarTarget> GetRadarTargets() const;
 		virtual const RadarTarget* const GetLockedTarget() const;
@@ -27,6 +31,8 @@ namespace SparkCell {
 
 		const Aircraft* mHost;
 		RadarTarget* mLockedTarget = nullptr;
+
+		int m_cursor_az = -60;
 	};
 
 }

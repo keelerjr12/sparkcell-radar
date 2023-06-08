@@ -59,25 +59,26 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     
 
 	const auto range = std::to_wstring(mRadar->GetRange());
-    vd->DrawString(range, -.96, .45, HJustify::CENTER, VJustify::CENTER);
+    vd->DrawString(range, -.92, .5, HJustify::CENTER, VJustify::TOP);
 
-	//Gdiplus::PointF      aLblPoint(size.x * .02, size.y / 2 - font_sz);
-	//graphics.DrawString(L"A", -1, &azFont, aLblPoint, &solidBrush);
-    //vd->DrawString(graphics, L"A", .02, .275);
-
+    vd->DrawString(L"A", -1, 0, HJustify::LEFT, VJustify::BOTTOM);
 	const auto azLbl = std::to_wstring(mRadar->GetAzimuth() / 10);
-    vd->DrawString(azLbl, -.96, 0, HJustify::CENTER, VJustify::CENTER);
+    vd->DrawString(azLbl, -1, 0, HJustify::LEFT, VJustify::TOP);
+
+	const auto elLbl = std::to_wstring(mRadar->GetElevation() / 10);
+    vd->DrawString(elLbl, -1, -.5, HJustify::LEFT, VJustify::BOTTOM);
+    vd->DrawString(L"B", -1, -.5, HJustify::LEFT, VJustify::TOP);
 
     // Render locked target params
     if (mRadar->GetLockedTarget()) {
         const auto aspect = std::to_wstring(static_cast<int>(mRadar->GetLockedTarget()->getAA()) / 10); // TODO: this should actuall be rounded
-        vd->DrawString(aspect, .094, .0514);
+        vd->DrawString(aspect, -.8171, .897);
 
         const auto track = std::to_wstring(static_cast<int>(mRadar->GetLockedTarget()->getHeading())); // TODO: this should actuall be rounded to nearest 10
-        vd->DrawString(track, .171, .0514);
+        vd->DrawString(track, -.6571, .897);
 
         const auto airspeed = std::to_wstring(static_cast<int>(mRadar->GetLockedTarget()->getAirspeed())); // TODO: this should actuall be rounded to nearest 10
-        vd->DrawString(airspeed, .643, .0514);
+        vd->DrawString(airspeed, .8171, .897, HJustify::RIGHT);
     }
 
     // Render azimuth scale
@@ -95,52 +96,42 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     vd->DrawLine(-.72, 0, -.8172, 0);
 
     for (auto tick = 1; tick <= nTicks; ++tick) {
-        vd->DrawLine(.0914, .5 + tick * .083333 , .1228, .5 + tick * .083333);
-        vd->DrawLine(.0914, .5 - tick * .083333 , .1228, .5 - tick * .083333);
+        vd->DrawLine(-.7554, tick * .16667 , -.8172, tick * .16667);
+        vd->DrawLine(-.7554, -1 * tick * .16667 , -.8172, -1 * tick * .16667);
     }
 
     // Render range scale
-    vd->DrawLine(.966, .75, 1, .75);
-    vd->DrawLine(.966, .5, 1, .5);
-    vd->DrawLine(.966, .25, 1, .25);
+    vd->DrawLine(.932, -.5, 1, -.5);
+    vd->DrawLine(.932, 0, 1, 0);
+    vd->DrawLine(.932, .5, 1, .5);
 
 
     // Render horizon line
-
-    Gdiplus::Matrix rot_mat(.04, .25, 0, 0, 0, 0);
-    rot_mat.RotateAt(-1*mRadar->Host().bank(), { 0, 0 });
-    Gdiplus::REAL rot_mat_els[6] = {};
-    rot_mat.GetElements(rot_mat_els);
-
-    Gdiplus::Matrix outer_rot_mat(.25, .25, 0, -.03, 0, 0);
-    outer_rot_mat.RotateAt(-1*mRadar->Host().bank(), { 0, 0 });
-    Gdiplus::REAL outer_rot_mat_els[6] = {};
-    outer_rot_mat.GetElements(outer_rot_mat_els);
-
-
-    vd->DrawLine(.5 - rot_mat_els[0], .5 - rot_mat_els[2], .5 - rot_mat_els[1], .5 - rot_mat_els[3]);
-   // vd->DrawLine(.5 + rot_mat_els[0], .5 - rot_mat_els[2], .5 + rot_mat_els[1], .5 - rot_mat_els[3]);
-
-    vd->DrawLine(.5 - outer_rot_mat_els[0], .5 - outer_rot_mat_els[2], .5 - outer_rot_mat_els[1], .5 - outer_rot_mat_els[3]);
-    //vd->DrawLine(.5 + x1_offset, .5 + y1_offset, .5 + x2_offset, .5 + y2_offset);
-
-    Gdiplus::REAL tt[6] = {};
-    Gdiplus::Matrix a(0, 0, 0, 0, .25, .25);
-
-    Gdiplus::Matrix translation(1, 0, 0, 1, -.5, -.5);
-    a.Multiply(&translation, Gdiplus::MatrixOrderAppend);
-    a.GetElements(tt);
-
     Gdiplus::Matrix rotation;
-    rotation.Rotate(45, Gdiplus::MatrixOrderAppend);
+    rotation.Rotate(-1*mRadar->Host().bank(), Gdiplus::MatrixOrderAppend);
 
+    Gdiplus::Matrix a(0, 0, 0, 0, -.0857, 0);
     a.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
+    Gdiplus::REAL tt[6] = {};
     a.GetElements(tt);
+    
+    Gdiplus::Matrix b(0, 0, 0, 0, -.4971, 0);
+    b.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
+    Gdiplus::REAL tu[6] = {};
+    b.GetElements(tu);
 
-    Gdiplus::Matrix translation_inv(1, 0, 0, 1, .5, .5);
-    a.Multiply(&translation_inv, Gdiplus::MatrixOrderAppend);
+    vd->DrawLine(tt[4], tt[5], tu[4], tu[5]);
+    vd->DrawLine(-1*tt[4], -1*tt[5], -1*tu[4], -1*tu[5]);
 
-    a.GetElements(tt);
+    Gdiplus::Matrix out_up(0, 0, 0, 0, -.4971, 0);
+    out_up.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
+    out_up.GetElements(tt);
+    Gdiplus::Matrix out_bot(0, 0, 0, 0, -.4971, -.0571);
+    out_bot.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
+    out_bot.GetElements(tu);
+
+    vd->DrawLine(tt[4], tt[5], tu[4], tu[5]);
+    vd->DrawLine(tu[4] - 2 * tt[4], tu[5] - 2 * tt[5], -tt[4], -tt[5]);
 
     // Render targets
     const auto width = .0315;
@@ -149,14 +140,23 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     auto targets = mRadar->GetRadarTargets();
 
     for (const auto& target : targets) {
-        auto x = (target.getATA() / (2 * mRadar->GetAzimuth())) + .5 - (width / 2.0);
-        auto y = 1 - (target.getRange() / mRadar->GetRange()) - (height / 2.0);
+        auto x = (target.getATA() / mRadar->GetAzimuth()) - (width / 2.0);
+        auto y = (target.getRange() * 2 / mRadar->GetRange()) - 1 + (height / 2.0);
         vd->DrawRect(x, y, width, height);
 
         // alt label per target
         const auto altitude = std::to_wstring(static_cast<int>(target.getAltitude() / 1000));
-        vd->DrawString(altitude, x + width / 2, y + .0486, HJustify::CENTER);
-    }
+		vd->DrawString(altitude, x + width / 2.f, y - height, HJustify::CENTER, VJustify::TOP);
+	}
+
+    // Render Cursors
+    auto x_T = (static_cast<float>(mRadar->GetCursorAzimuth()) / mRadar->GetAzimuth()) - (width / 2.0);
+    auto y_T = 0;
+    const auto width_T = .03;
+    const auto height_T = .03;
+    vd->DrawLine(x_T - width_T / 2.f, y_T - height / 2.f, x_T - width_T / 2.f, y_T + height_T / 2.f);
+    vd->DrawLine(x_T + width_T / 2.f, y_T - height / 2.f, x_T + width_T / 2.f, y_T + height_T / 2.f);
+
 
     return true;
 }

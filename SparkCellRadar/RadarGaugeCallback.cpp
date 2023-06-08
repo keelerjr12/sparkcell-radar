@@ -17,6 +17,7 @@ IGaugeCCallback* RadarGaugeCallback::QueryInterface(LPCSTR pszInterface)
 
 void RadarGaugeCallback::Update()
 {
+	mRadar->SlewRight();
 	mRadar->Update();
 }
 

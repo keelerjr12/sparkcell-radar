@@ -77,8 +77,8 @@ class VirtualDisplay {
 	void DrawRect(float x, float y, float width, float height) {
 		const auto x_px = m_x_sz * (1 + x) / 2;
 		const auto y_px = m_y_sz * (1 - y) / 2;
-		const auto w_px = m_x_sz * width;
-		const auto h_px = m_y_sz * height;
+		const auto w_px = m_x_sz / 2.f * width;
+		const auto h_px = m_y_sz / 2.f * height;
 
 	    Gdiplus::SolidBrush brush(Gdiplus::Color(255, 255, 255, 255));
 		m_graphics.FillRectangle(&brush, x_px, y_px, w_px, h_px);
