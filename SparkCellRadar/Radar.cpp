@@ -57,14 +57,37 @@ void SparkCell::Radar::Update() {
 			}
 		}
 	}
+
+	m_cursor_az -= m_x_inc * 1.f / 18 * 60;
+	m_cursor_rng += m_y_inc * 1.f / 18 * 60;
 }
 
-void SparkCell::Radar::SlewRight() {
-	m_cursor_az = m_cursor_az + static_cast<int>(1.f / 18 * 20);
+void SparkCell::Radar::SlewLeft(float inc) {
+	m_x_inc = inc;
+	//m_cursor_az += inc * 1.f / 18 * 20;
+}
+
+void SparkCell::Radar::SlewRight(float inc) {
+	m_x_inc = inc;
+	//m_cursor_az += inc * 1.f / 18 * 20;
+}
+
+void SparkCell::Radar::SlewUp(float inc) {
+	m_y_inc = inc;
+	//m_cursor_rng += inc * 1.f / 18 * 20;
+}
+
+void SparkCell::Radar::SlewDown(float inc) {
+	m_y_inc = inc;
+	//m_cursor_rng += inc * 1.f / 18 * 20;
 }
 
 int SparkCell::Radar::GetCursorAzimuth() const {
-	return m_cursor_az;
+	return static_cast<int>(m_cursor_az);
+}
+
+int SparkCell::Radar::GetCursorRange() const {
+	return static_cast<int>(m_cursor_rng);
 }
 
 int SparkCell::Radar::GetAzimuth() const {

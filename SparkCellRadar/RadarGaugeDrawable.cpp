@@ -151,9 +151,10 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
 
     // Render Cursors
     auto x_T = (static_cast<float>(mRadar->GetCursorAzimuth()) / mRadar->GetAzimuth()) - (width / 2.0);
-    auto y_T = 0;
-    const auto width_T = .03;
-    const auto height_T = .03;
+    auto y_T = (static_cast<float>(mRadar->GetCursorRange()) * 2 / mRadar->GetRange()) - 1 - (height / 2.0);
+;
+    const auto width_T = .0622;
+    const auto height_T = .0719;
     vd->DrawLine(x_T - width_T / 2.f, y_T - height / 2.f, x_T - width_T / 2.f, y_T + height_T / 2.f);
     vd->DrawLine(x_T + width_T / 2.f, y_T - height / 2.f, x_T + width_T / 2.f, y_T + height_T / 2.f);
 

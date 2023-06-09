@@ -5,8 +5,6 @@
 #include "RadarGaugeDrawable.h"
 #include "Pdk.h"
 
-#include <debugapi.h>
-
 float GetAxisPercent(int sign, UINT32 evdata)
 {
 	if (evdata & 0xFFFF0000)
@@ -32,27 +30,14 @@ void FSAPI KeyEventHandler(ID32 event, UINT32 evdata, PVOID userdata)
 			auto ap1 = GetAxisPercent(1, evdata);
 			auto ap2 = GetAxisPercent(-1, evdata);
 
-			const auto a = std::to_wstring(ap1);
-			const auto b = std::to_wstring(ap2);
-			const auto c = a + L" " + b + L"\n";
-			OutputDebugString(c.c_str());
+			std::cout << ap1 << " " << ap2 << std::endl;
 
-			if (ap1 > 0)
-				radar->SlewRight(ap1);
-			else
-				radar->SlewLeft(ap1);
-
+			radar->SlewRight();
 			break;
 		}
-		case KEY_HOTAS_SLEW_AXIS_Y:
+		case KEY_WEAPON_PREV:
 		{
-			auto ap1 = GetAxisPercent(1, evdata);
-
-			if (ap1 > 0)
-				radar->SlewDown(ap1);
-			else
-				radar->SlewUp(ap1);
-
+			radar->SlewLeft();
 			break;
 		}
     };
