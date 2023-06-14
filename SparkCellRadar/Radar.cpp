@@ -60,6 +60,8 @@ void SparkCell::Radar::Update() {
 
 	m_cursor_az -= m_x_inc * 1.f / 18 * 60;
 	m_cursor_rng += m_y_inc * 1.f / 18 * 60;
+	m_x_inc = 0;
+	m_y_inc = 0;
 }
 
 void SparkCell::Radar::SlewLeft(float inc) {

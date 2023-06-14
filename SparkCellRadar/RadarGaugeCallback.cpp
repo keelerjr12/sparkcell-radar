@@ -25,36 +25,47 @@ void FSAPI KeyEventHandler(ID32 event, UINT32 evdata, PVOID userdata)
 	auto radar = static_cast<SparkCell::Radar*>(userdata);
 
 
-    switch (event)
-    {
-		case KEY_HOTAS_SLEW_AXIS_X:
-		{
-			auto ap1 = GetAxisPercent(1, evdata);
-			auto ap2 = GetAxisPercent(-1, evdata);
-
-			const auto a = std::to_wstring(ap1);
-			const auto b = std::to_wstring(ap2);
-			const auto c = a + L" " + b + L"\n";
-			OutputDebugString(c.c_str());
-
-			if (ap1 > 0)
-				radar->SlewRight(ap1);
-			else
-				radar->SlewLeft(ap1);
-
-			break;
+	switch (event)
+	{
+	case KEY_HOTAS_KEY_A0:
+		std::cout << "Lock!\n";
+		break;
+	case KEY_GUN_SYSTEM_ROTATE_GUNS:
+		if (evdata == 45) {
+			radar->SlewUp(.5f);
+			radar->SlewRight(-.5f);
 		}
-		case KEY_HOTAS_SLEW_AXIS_Y:
+		else if (evdata == 90)
 		{
-			auto ap1 = GetAxisPercent(1, evdata);
-
-			if (ap1 > 0)
-				radar->SlewDown(ap1);
-			else
-				radar->SlewUp(ap1);
-
-			break;
+			radar->SlewRight(-.5f);
 		}
+		else if (evdata == 135) {
+			radar->SlewDown(-.5f);
+			radar->SlewRight(-.5f);
+		}
+		else if (evdata == 180)
+		{
+			radar->SlewDown(-.5f);
+		}
+		else if (evdata == 225)
+		{
+			radar->SlewDown(-.5f);
+			radar->SlewLeft(.5f);
+		}
+		else if (evdata == 270)
+		{
+			radar->SlewLeft(.5f);
+		}
+		else if (evdata == 315)
+		{
+			radar->SlewUp(.5f);
+			radar->SlewLeft(.5f);
+		}
+		else if (evdata == 0)
+		{
+			radar->SlewUp(.5f);
+		}
+		break;
     };
 }
 RadarGaugeCallback::RadarGaugeCallback(UINT32 containerId, const SparkCell::Aircraft& host) : m_RefCount(1), mContainerId(containerId), mRadar(new SparkCell::Radar(host)) {
