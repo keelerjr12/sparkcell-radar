@@ -89,6 +89,9 @@ void SparkCell::Radar::TryLock()
 		{
 			this->mLockedTarget = &tgt;
 		}
+		else {
+			this->mLockedTarget = nullptr;
+		}
 	}
 }
 
