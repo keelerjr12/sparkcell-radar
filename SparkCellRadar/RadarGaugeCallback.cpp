@@ -24,11 +24,11 @@ void FSAPI KeyEventHandler(ID32 event, UINT32 evdata, PVOID userdata)
 {
 	auto radar = static_cast<SparkCell::Radar*>(userdata);
 
-
 	switch (event)
 	{
 	case KEY_HOTAS_KEY_A0:
 		std::cout << "Lock!\n";
+		radar->TryLock();
 		break;
 	case KEY_GUN_SYSTEM_ROTATE_GUNS:
 		if (evdata == 45) {

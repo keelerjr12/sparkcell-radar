@@ -18,6 +18,8 @@ namespace SparkCell {
 		void SlewUp(float inc);
 		void SlewDown(float inc);
 
+		void TryLock();
+
 		const Aircraft& Host() const { return *mHost; }
 
 		virtual int GetAzimuth() const;
@@ -34,7 +36,7 @@ namespace SparkCell {
 		std::vector<RadarTarget> mRadarTargets;
 
 		const Aircraft* mHost;
-		RadarTarget* mLockedTarget = nullptr;
+		const RadarTarget* mLockedTarget = nullptr;
 
 		float m_cursor_az = 0;
 		float m_cursor_rng = 20;

@@ -29,7 +29,6 @@
 
 void SparkCell::Radar::Update() {
 	mRadarTargets.clear();
-	mLockedTarget = nullptr;
 
 	CComPtr<P3D::IBaseObjectV400> spUserAvatar;
 	P3D::PdkServices::GetSimObjectManager()->GetUserAvatar(&spUserAvatar);
@@ -53,7 +52,6 @@ void SparkCell::Radar::Update() {
 
 			if (abs(tgt.getATA()) <= GetAzimuth()) {
 				mRadarTargets.push_back(tgt);
-				mLockedTarget = &mRadarTargets.back();
 			}
 		}
 	}
@@ -82,6 +80,16 @@ void SparkCell::Radar::SlewUp(float inc) {
 void SparkCell::Radar::SlewDown(float inc) {
 	m_y_inc = inc;
 	//m_cursor_rng += inc * 1.f / 18 * 20;
+}
+
+void SparkCell::Radar::TryLock()
+{
+	for (const auto& tgt : this->mRadarTargets) {
+		if (abs(m_cursor_az - tgt.getBearing()) < 3.0f && abs(m_cursor_rng - tgt.getRange()) < 1.0f)
+		{
+			this->mLockedTarget = &tgt;
+		}
+	}
 }
 
 int SparkCell::Radar::GetCursorAzimuth() const {
