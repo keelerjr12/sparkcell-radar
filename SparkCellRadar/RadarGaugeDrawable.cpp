@@ -36,6 +36,12 @@ void RadarGaugeDrawable::Show(bool on)
 {
 }
 
+std::wstring create_aspect_angle_str(float aspect_angle) {
+    const auto trunc_aa = static_cast<int>(aspect_angle / 10);
+
+    const auto aspect = std::to_wstring(static_cast<int>(aspect / 10))
+}
+
 bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOINT size, HDC hdc, PIMAGE pImage)
 {
     if (!vd) {
@@ -71,7 +77,6 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
 
     // Render locked target params
     if (mRadar->GetLockedTarget()) {
-        const auto aspect = std::to_wstring(static_cast<int>(mRadar->GetLockedTarget()->getAA()) / 10); // TODO: this should actuall be rounded
         vd->DrawString(aspect, -.8171, .897);
 
         const auto track = std::to_wstring(static_cast<int>(mRadar->GetLockedTarget()->getHeading())); // TODO: this should actuall be rounded to nearest 10
