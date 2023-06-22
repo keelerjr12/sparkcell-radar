@@ -36,10 +36,17 @@ void RadarGaugeDrawable::Show(bool on)
 {
 }
 
-std::wstring create_aspect_angle_str(float aspect_angle) {
-    const auto trunc_aa = static_cast<int>(aspect_angle / 10);
+std::wstring parse_aspect_angle_str(float aspect_angle) {
+    auto suffix = 'R';
+    if (aspect_angle < 0) {
+        suffix = 'L';
+    }
 
-    const auto aspect = std::to_wstring(static_cast<int>(aspect / 10))
+    const auto trunc_aa = static_cast<int>(std::abs(std::round(aspect_angle)) / 10);
+    auto aa_str = std::to_wstring(trunc_aa);
+    aa_str.push_back(suffix);
+
+    return aa_str;
 }
 
 bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOINT size, HDC hdc, PIMAGE pImage)
@@ -63,7 +70,6 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     vd->DrawString(L"WPN", .33333, -1, HJustify::CENTER, VJustify::BOTTOM);
     vd->DrawString(L"DCLT", .66667, -1, HJustify::CENTER, VJustify::BOTTOM);
     
-
 	const auto range = std::to_wstring(mRadar->GetRange());
     vd->DrawString(range, -.92, .5, HJustify::CENTER, VJustify::TOP);
 
@@ -77,6 +83,7 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
 
     // Render locked target params
     if (mRadar->GetLockedTarget()) {
+        const auto aspect = parse_aspect_angle_str(mRadar->GetLockedTarget()->getAA());
         vd->DrawString(aspect, -.8171, .897);
 
         const auto track = std::to_wstring(static_cast<int>(mRadar->GetLockedTarget()->getHeading())); // TODO: this should actuall be rounded to nearest 10
@@ -109,7 +116,6 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     vd->DrawLine(.932, -.5, 1, -.5);
     vd->DrawLine(.932, 0, 1, 0);
     vd->DrawLine(.932, .5, 1, .5);
-
 
     // Render horizon line
     Gdiplus::Matrix rotation;

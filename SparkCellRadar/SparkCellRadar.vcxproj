@@ -166,6 +166,7 @@
     <ClInclude Include="RadarTarget.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="PropertySheet.props" />
     <None Include="Radar_Def.def" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

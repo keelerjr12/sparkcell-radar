@@ -1,34 +1,22 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <SimBase.Document Type="ObjectFile" version="5,3">
-    <Descr>Prepar3D default scenario. On the runway at Randolph AFB.</Descr>
-    <Title>Prepar3D Default</Title>
+    <Title>Lockheed Martin F-35A Lightning II F35 - 2023-01-26 05-32-39</Title>
     <WorldBase.Flight>
         <SimContain.UserOwnship InstanceId="{1CCF6D89-BA36-445F-B5C8-47571ABC0773}">
-            <SpeedKnots>350.000000</SpeedKnots>
-            <AltitudeIsAGL>False</AltitudeIsAGL>
+            <SpeedKnots>420.000000</SpeedKnots>
+            <AltitudeIsAGL>True</AltitudeIsAGL>
         </SimContain.UserOwnship>
         <SimContain.UserAvatar InstanceId="{508FDC98-BF36-4C0F-B22D-27045DF1A0CF}">
         </SimContain.UserAvatar>
-        <SimContain.Container InstanceId="{C34E94F3-FA34-4C16-9F01-57E166C90F1A}">
+        <SimContain.Container InstanceId="{58C36D59-7D92-40B7-84A7-7FF58691ACB8}">
             <Descr>Airplane1</Descr>
-            <AltitudeIsAGL>False</AltitudeIsAGL>
+            <AltitudeIsAGL>True</AltitudeIsAGL>
             <ContainerID>0</ContainerID>
             <IsOnGround>False</IsOnGround>
-            <WorldPosition>N29° 57' 22.060217",W98° 16' 5.338246",+020000.00</WorldPosition>
-            <Orientation>0.000000,0.000000,180.000019</Orientation>
+            <WorldPosition>N34° 21' 52.287014",W99° 48' 51.024571",+024000.00</WorldPosition>
+            <Orientation>1.999992,0.000000,180.000008</Orientation>
             <ContainerTitle>F-16</ContainerTitle>
-            <AIType>Airplane</AIType>
-            <AircraftAI>
-                <GroundCruiseSpeed>35.000000</GroundCruiseSpeed>
-                <GroundTurnSpeed>10.000000</GroundTurnSpeed>
-                <GroundTurnTime>3.500000</GroundTurnTime>
-                <YieldToUser>True</YieldToUser>
-                <AssignedHeading>180.000000</AssignedHeading>
-                <AssignedAltitude>60960.000000</AssignedAltitude>
-                <AssignedAirspeed>300.000000</AssignedAirspeed>
-                <CurrentWaypoint>0</CurrentWaypoint>
-            </AircraftAI>
         </SimContain.Container>
     </WorldBase.Flight>
     <MissionBuilder.MissionBuilder>

@@ -85,7 +85,8 @@ void SparkCell::Radar::SlewDown(float inc) {
 void SparkCell::Radar::TryLock()
 {
 	for (const auto& tgt : this->mRadarTargets) {
-		if (abs(m_cursor_az - tgt.getBearing()) < 3.0f && abs(m_cursor_rng - tgt.getRange()) < 1.0f)
+		const auto ang_diff = 180.f - std::abs(std::abs(m_cursor_az - tgt.getBearing()) - 180.f);
+		if (ang_diff < 3.0f && abs(m_cursor_rng - tgt.getRange()) < 1.0f)
 		{
 			this->mLockedTarget = &tgt;
 		}
