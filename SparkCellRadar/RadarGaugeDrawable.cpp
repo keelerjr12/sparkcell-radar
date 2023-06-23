@@ -8,8 +8,34 @@
 #include <numbers>
 #include <string>
 
+using namespace SparkCell;
+
 
 RadarGaugeDrawable::RadarGaugeDrawable(const IGaugeCDrawableCreateParameters* pParams, const SparkCell::Radar* const radar) : mRadar(radar), vd(std::unique_ptr<VirtualDisplay>(nullptr)) {
+    top_lbls_.push_back(std::move(Label{ L"CRM" }));
+    const auto inc = 2.f / (top_lbls_.size() + 1);
+
+    auto x = -1.f;
+
+    for (auto& lbl : top_lbls_) {
+       x += inc;
+       lbl.Move(x, 1);
+
+	   lbl.SetHAlign(HJustify::CENTER);
+	   lbl.SetVAlign(VJustify::TOP);
+
+    }
+
+    x = -1.f;
+
+    for (auto& lbl : bottom_lbls_) {
+       x += inc;
+       lbl.Move(x, -1);
+
+	   lbl.SetHAlign(HJustify::CENTER);
+	   lbl.SetVAlign(VJustify::BOTTOM);
+
+    }
 }
 
 ULONG RadarGaugeDrawable::AddRef()
@@ -29,7 +55,6 @@ FLAGS32 RadarGaugeDrawable::GetFlags()
 
 void RadarGaugeDrawable::Update()
 {
-    std::cout << "UPDATE\n";
 }
 
 void RadarGaugeDrawable::Show(bool on)
@@ -58,17 +83,15 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     vd->Clear();
 
     vd->SetFontSize(size.x * .0371);
-    vd->DrawString(L"CRM", -.66667, 1, HJustify::CENTER);
-    vd->DrawString(L"RWS", -.33333, 1, HJustify::CENTER);
-    vd->DrawString(L"NORM", 0, 1, HJustify::CENTER);
-    vd->DrawString(L"OVRD", .33333, 1, HJustify::CENTER);
-    vd->DrawString(L"CNTL", .66667, 1, HJustify::CENTER);
 
-    vd->DrawString(L"SWAP", -.66667,  -1, HJustify::CENTER, VJustify::BOTTOM);
-    vd->DrawString(L"FCR", -.33333,  -1, HJustify::CENTER, VJustify::BOTTOM);
-    vd->DrawString(L"HSD",  0, -1, HJustify::CENTER, VJustify::BOTTOM);
-    vd->DrawString(L"WPN", .33333, -1, HJustify::CENTER, VJustify::BOTTOM);
-    vd->DrawString(L"DCLT", .66667, -1, HJustify::CENTER, VJustify::BOTTOM);
+    //bottom_lbls_[1].SetBackground();
+    /*for (const auto& lbl : top_lbls_) {
+        lbl.Render(*vd);
+    }
+
+    for (const auto& lbl : bottom_lbls_) {
+        lbl.Render(*vd);
+    }*/
     
 	const auto range = std::to_wstring(mRadar->GetRange());
     vd->DrawString(range, -.92, .5, HJustify::CENTER, VJustify::TOP);

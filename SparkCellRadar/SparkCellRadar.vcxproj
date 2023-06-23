@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Aircraft.cpp" />
+    <ClCompile Include="Label.cpp" />
     <ClCompile Include="Radar.cpp" />
     <ClCompile Include="RadarAircraftCallback.cpp" />
     <ClCompile Include="RadarTarget.cpp" />
@@ -156,14 +157,17 @@
     <ClCompile Include="RadarGaugeDrawable.cpp" />
     <ClCompile Include="RadarPanelCallback.cpp" />
     <ClCompile Include="RadarPanelCallback.h" />
+    <ClCompile Include="VirtualDisplay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aircraft.h" />
+    <ClInclude Include="Label.h" />
     <ClInclude Include="Radar.h" />
     <ClInclude Include="RadarAircraftCallback.h" />
     <ClInclude Include="RadarGaugeCallback.h" />
     <ClInclude Include="RadarGaugeDrawable.h" />
     <ClInclude Include="RadarTarget.h" />
+    <ClInclude Include="VirtualDisplay.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />

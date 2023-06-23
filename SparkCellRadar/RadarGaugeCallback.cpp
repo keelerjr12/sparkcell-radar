@@ -7,19 +7,6 @@
 
 #include <debugapi.h>
 
-float GetAxisPercent(int sign, UINT32 evdata)
-{
-	if (evdata & 0xFFFF0000)
-	{
-		sign *= -1;
-		evdata = 0xFFFFFFFF - evdata;
-	}
-	evdata = evdata & 0x0000FFFF;
-	float axisPercent = (evdata / 65535.0f) * sign;
-
-	return axisPercent;
-}
-
 void FSAPI KeyEventHandler(ID32 event, UINT32 evdata, PVOID userdata)
 {
 	auto radar = static_cast<SparkCell::Radar*>(userdata);
@@ -27,7 +14,6 @@ void FSAPI KeyEventHandler(ID32 event, UINT32 evdata, PVOID userdata)
 	switch (event)
 	{
 	case KEY_HOTAS_KEY_A0:
-		std::cout << "Lock!\n";
 		radar->TryLock();
 		break;
 	case KEY_GUN_SYSTEM_ROTATE_GUNS:
