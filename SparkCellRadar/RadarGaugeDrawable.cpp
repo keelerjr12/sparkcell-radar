@@ -11,37 +11,9 @@
 using namespace SparkCell;
 
 
-RadarGaugeDrawable::RadarGaugeDrawable(const IGaugeCDrawableCreateParameters* pParams, const SparkCell::Radar* const radar) : mRadar(radar), vd(std::unique_ptr<VirtualDisplay>(nullptr)) {
-    const auto inc = 2.f / (top_lbl_strs_.size() + 1);
-
-    auto x = -1.f;
-
-    for (const auto& text : top_lbl_strs_) {
-       x += inc;
-
-       SparkCell::Label lbl(text);
-
-       lbl.Move(x, 1);
-	   lbl.SetHAlign(HJustify::CENTER);
-	   lbl.SetVAlign(VJustify::TOP);
-
-       top_lbls_.emplace_back(std::move(lbl));
-    }
-
-    x = -1.f;
-
-    for (const auto& text : bottom_lbl_strs_) {
-       x += inc;
-
-       SparkCell::Label lbl(text);
-
-       lbl.Move(x, -1);
-	   lbl.SetHAlign(HJustify::CENTER);
-	   lbl.SetVAlign(VJustify::BOTTOM);
-
-       bottom_lbls_.emplace_back(std::move(lbl));
-    }
-}
+RadarGaugeDrawable::RadarGaugeDrawable(const IGaugeCDrawableCreateParameters* pParams, const SparkCell::Radar* const radar) 
+    : mRadar(radar), 
+      vd(std::unique_ptr<VirtualDisplay>(nullptr)) { }
 
 ULONG RadarGaugeDrawable::AddRef()
 {
@@ -83,11 +55,10 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
 {
     if (!vd) {
         vd = std::make_unique<VirtualDisplay>(hdc, size.x, size.y);
+        Setup();
     }
 
     vd->Clear();
-
-    vd->SetFontSize(size.x * .0371);
 
     bottom_lbls_[1].SetBackground();
     for (const auto& lbl : top_lbls_) {
@@ -181,7 +152,8 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     for (const auto& target : targets) {
         auto x = (target.getATA() / mRadar->GetAzimuth()) - (width / 2.0);
         auto y = (target.getRange() * 2 / mRadar->GetRange()) - 1 + (height / 2.0);
-        vd->DrawRect(x, y, width, height);
+        const auto brush = Gdiplus::SolidBrush(Gdiplus::Color::White);
+        vd->DrawRect(brush, x, y, width, height);
 
         // alt label per target
         const auto altitude = std::to_wstring(static_cast<int>(target.getAltitude() / 1000));
@@ -209,4 +181,42 @@ bool RadarGaugeDrawable::SetupDraw(PIXPOINT size, HDC hdc, PIMAGE pImage)
 bool RadarGaugeDrawable::GetDraw(IGaugeCDrawableDrawParameters* pParameters)
 {
     return false;
+}
+
+void RadarGaugeDrawable::Setup() {
+    vd->SetFontSize(vd->DisplayBox().Width() * .0371);
+
+    const auto inc = 2.f / (top_lbl_strs_.size() + 1);
+
+    auto x = -1.f;
+
+    for (const auto& text : top_lbl_strs_) {
+       x += inc;
+
+       SparkCell::Label lbl(text, *vd.get());
+
+       auto box = lbl.BoundingBox();
+       box.MoveCenter(x, 1.f);
+       box.MoveTop(1.f);
+       lbl.Move(box.X(), box.Y());
+
+       top_lbls_.emplace_back(std::move(lbl));
+    }
+
+    x = -1.f;
+
+    for (const auto& text : bottom_lbl_strs_) {
+       x += inc;
+
+       SparkCell::Label lbl(text, *vd.get());
+
+       auto box = lbl.BoundingBox();
+       box.MoveCenter(x, 1.f);
+       box.MoveBottom(-1.f);
+       lbl.Move(box.X(), box.Y());
+	   /*lbl.SetHAlign(HJustify::CENTER);
+	   lbl.SetVAlign(VJustify::BOTTOM);*/
+
+       bottom_lbls_.emplace_back(std::move(lbl));
+    }
 }

@@ -32,6 +32,8 @@ public:
 	virtual bool GetDraw(IGaugeCDrawableDrawParameters* pParameters) override;
 
 private:
+	void Setup();
+
 	const SparkCell::Radar* const mRadar;
 	std::unique_ptr<SparkCell::VirtualDisplay> vd;
 

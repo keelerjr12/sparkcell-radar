@@ -3,9 +3,10 @@
 #include "VirtualDisplay.h"
 
 namespace SparkCell {
-	Label::Label(const std::wstring& text) {
-		text_ = text;
-	}
+	Label::Label(const std::wstring& text, VirtualDisplay& vd) 
+		: text_(text),
+		  vd_(&vd),
+		  bkgd_(std::make_unique<Gdiplus::SolidBrush>(Gdiplus::Color::Transparent)) { }
 
 	void Label::Move(float x, float y) {
 		x_ = x;
@@ -25,17 +26,19 @@ namespace SparkCell {
 	}
 
 	void Label::SetBackground() {
-		//Gdiplus::SolidBrush (Gdiplus::Color(255, 255, 255, 255));
 		bkgd_ = std::make_unique<Gdiplus::SolidBrush>(Gdiplus::Color::White);
 	}
 
+	Rect Label::BoundingBox() const {
+		return vd_->FontBoundingBox(text_);
+	}
+
+	// TODO: remove VD
 	void Label::Render(VirtualDisplay& vd) const {
-		auto box = vd.FontBoundingBox(text_);
+		auto box = vd_->FontBoundingBox(text_);
 
-		box.MoveCenter(x_, y_);
-
-		vd.DrawRect(box);
-		vd.DrawString(text_.c_str(), x_, y_, h_align_, v_align_);
+		vd.DrawRect(*bkgd_.get(), x_, y_, box.Width(), box.Height());
+		vd.DrawString(text_.c_str(), x_, y_);
 	}
 
 }

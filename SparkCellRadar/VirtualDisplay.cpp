@@ -54,25 +54,18 @@ namespace SparkCell {
 		m_graphics.DrawLine(m_pen.get(), Gdiplus::Point(x1_px, y1_px), Gdiplus::Point(x2_px, y2_px));
 	}
 
-	void VirtualDisplay::DrawRect(float x, float y, float width, float height) {
+	void VirtualDisplay::DrawRect(const Gdiplus::Brush& brush, float x, float y, float width, float height) {
 		const auto x_px = m_x_sz * (1 + x) / 2;
 		const auto y_px = m_y_sz * (1 - y) / 2;
 		const auto w_px = m_x_sz / 2.f * width;
 		const auto h_px = m_y_sz / 2.f * height;
 
-		Gdiplus::SolidBrush brush(Gdiplus::Color(255, 255, 255, 255));
+		//Gdiplus::SolidBrush brush(Gdiplus::Color(255, 255, 255, 255));
 		m_graphics.FillRectangle(&brush, x_px, y_px, w_px, h_px);
 	}
 
-	void VirtualDisplay::DrawRect(const Rect& rect) {
-		const auto x_px = m_x_sz * (1 + rect.X()) / 2;
-		const auto y_px = m_y_sz * (1 - rect.Y()) / 2;
-		const auto w_px = m_x_sz * rect.Width();
-		const auto h_px = m_y_sz * rect.Height();
-
-		Gdiplus::SolidBrush brush(Gdiplus::Color(255, 255, 255, 255));
-		m_graphics.FillRectangle(& brush, x_px, y_px, w_px, h_px);
-		//DrawRect(rect.X(), rect.Y(), rect.Width(), rect.Height());
+	void VirtualDisplay::DrawRect(const Gdiplus::Brush& brush, const Rect& rect) {
+		DrawRect(brush, rect.X(), rect.Y(), rect.Width(), rect.Height());
 	}
 
 	void VirtualDisplay::SetFontSize(float fnt_sz) {
@@ -80,11 +73,15 @@ namespace SparkCell {
 		m_fnt = std::make_unique<Gdiplus::Font>(L"B612", fnt_sz, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel, &m_pvc);
 	}
 
+	Rect VirtualDisplay::DisplayBox() const {
+		return Rect{ 0.f, 0.f, static_cast<float>(m_x_sz), static_cast<float>(m_y_sz)};
+	}
+
 	Rect VirtualDisplay::FontBoundingBox(const std::wstring& txt) const {
 		Gdiplus::RectF box;
 		m_graphics.MeasureString(txt.c_str(), txt.size(), m_fnt.get(), { 0, 0 }, &box);
 
-		const auto bb = Rect{ 0, 0, box.Width / m_x_sz, box.Height / m_y_sz };
+		const auto bb = Rect{ 0, 0, 2 * box.Width / m_x_sz, 2 * box.Height / m_y_sz };
 
 		return bb;
 	}

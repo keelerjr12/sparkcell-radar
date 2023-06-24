@@ -7,6 +7,7 @@
     <Descr>AceXML Document</Descr>
     <Filename>SparkCellRadar.xml</Filename>
     <SimGauge.Gauge id="Gauge" ArtDirectory="C:\GaugeArt">
+	<Size>260,260</Size>
 	<FloatPosition>0.000,0.000</FloatPosition>
         <Element id="Map border">
             <FloatPosition>30.000,30.000</FloatPosition>

@@ -1,15 +1,17 @@
 #ifndef LABEL_H
 #define LABEL_H
 
+#include "Rect.h"
+#include "VirtualDisplay.h"
 #include <memory>
 #include <string>
-#include "VirtualDisplay.h"
 
 namespace SparkCell {
+	class VirtualDisplay;
 
 	class Label {
 	public:
-		Label(const std::wstring& text);
+		Label(const std::wstring& text, VirtualDisplay& vd);
 
 		void Move(float x, float y);
 		void SetHAlign(HJustify h_align);
@@ -17,6 +19,8 @@ namespace SparkCell {
 
 		const Gdiplus::Brush& Background() const;
 		void SetBackground();
+
+		Rect BoundingBox() const;
 
 		void Render(VirtualDisplay& vd) const;
 
@@ -31,6 +35,7 @@ namespace SparkCell {
 		VJustify v_align_ = { VJustify::CENTER };
 
 		std::unique_ptr<Gdiplus::Brush> bkgd_;
+		VirtualDisplay* vd_;
 	};
 
 }

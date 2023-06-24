@@ -12,7 +12,9 @@ namespace SparkCell {
 		float Width() const { return width_; }
 		float Height() const { return height_; }
 
+		void MoveTop(float y);
 		void MoveCenter(float x, float y);
+		void MoveBottom(float y);
 
 	private:
 		float x_;
