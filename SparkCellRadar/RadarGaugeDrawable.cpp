@@ -12,29 +12,34 @@ using namespace SparkCell;
 
 
 RadarGaugeDrawable::RadarGaugeDrawable(const IGaugeCDrawableCreateParameters* pParams, const SparkCell::Radar* const radar) : mRadar(radar), vd(std::unique_ptr<VirtualDisplay>(nullptr)) {
-    top_lbls_.push_back(std::move(Label{ L"CRM" }));
-    const auto inc = 2.f / (top_lbls_.size() + 1);
+    const auto inc = 2.f / (top_lbl_strs_.size() + 1);
 
     auto x = -1.f;
 
-    for (auto& lbl : top_lbls_) {
+    for (const auto& text : top_lbl_strs_) {
        x += inc;
-       lbl.Move(x, 1);
 
+       SparkCell::Label lbl(text);
+
+       lbl.Move(x, 1);
 	   lbl.SetHAlign(HJustify::CENTER);
 	   lbl.SetVAlign(VJustify::TOP);
 
+       top_lbls_.emplace_back(std::move(lbl));
     }
 
     x = -1.f;
 
-    for (auto& lbl : bottom_lbls_) {
+    for (const auto& text : bottom_lbl_strs_) {
        x += inc;
-       lbl.Move(x, -1);
 
+       SparkCell::Label lbl(text);
+
+       lbl.Move(x, -1);
 	   lbl.SetHAlign(HJustify::CENTER);
 	   lbl.SetVAlign(VJustify::BOTTOM);
 
+       bottom_lbls_.emplace_back(std::move(lbl));
     }
 }
 
@@ -84,14 +89,14 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
 
     vd->SetFontSize(size.x * .0371);
 
-    //bottom_lbls_[1].SetBackground();
-    /*for (const auto& lbl : top_lbls_) {
+    bottom_lbls_[1].SetBackground();
+    for (const auto& lbl : top_lbls_) {
         lbl.Render(*vd);
     }
 
     for (const auto& lbl : bottom_lbls_) {
         lbl.Render(*vd);
-    }*/
+    }
     
 	const auto range = std::to_wstring(mRadar->GetRange());
     vd->DrawString(range, -.92, .5, HJustify::CENTER, VJustify::TOP);

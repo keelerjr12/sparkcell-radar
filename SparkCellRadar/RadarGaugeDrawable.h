@@ -35,21 +35,11 @@ private:
 	const SparkCell::Radar* const mRadar;
 	std::unique_ptr<SparkCell::VirtualDisplay> vd;
 
-	std::vector<SparkCell::Label> top_lbls_;/* = {
-		std::move(SparkCell::Label{L"CRM"}) };/*,
-		std::move(SparkCell::Label{L"RWS"}), 
-		std::move(SparkCell::Label{L"NORM"}),
-		std::move(SparkCell::Label{L"OVRD"}),
-		std::move(SparkCell::Label{L"CNTL"})
-	};*/
+	std::vector<std::wstring> top_lbl_strs_ { L"CRM", L"RWS", L"NORM", L"OVRD", L"CNTL" };
+	std::vector<std::wstring> bottom_lbl_strs_ { L"SWAP", L"FCR", L"HSD", L"WPN", L"DCLT" };
 
-	std::vector<SparkCell::Label> bottom_lbls_; /* = {
-		std::move(SparkCell::Label {L"SWAP"}), 
-		std::move(SparkCell::Label{L"FCR"}), 
-		std::move(SparkCell::Label{L"HSD"}),
-		std::move(SparkCell::Label{L"WPN"}),
-		std::move(SparkCell::Label{L"DCLT"})
-	};*/
+	std::vector<SparkCell::Label> top_lbls_;
+	std::vector<SparkCell::Label> bottom_lbls_;
 };
 
 #endif // RADAR_GAUGE_DRAWABLE_H

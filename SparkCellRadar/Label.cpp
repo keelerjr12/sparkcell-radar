@@ -1,4 +1,5 @@
 #include "Label.h"
+#include "Rect.h"
 #include "VirtualDisplay.h"
 
 namespace SparkCell {
@@ -19,18 +20,21 @@ namespace SparkCell {
 		v_align_ = v_align;
 	}
 
-	
-	/*const Gdiplus::Brush& Label::Background() const {
-		return Gdiplus::SolidBrush (Gdiplus::Color(255, 255, 255, 255));
-		//return *bkgd_.get();
-	}*/
+	const Gdiplus::Brush& Label::Background() const {
+		return *bkgd_;
+	}
 
 	void Label::SetBackground() {
 		//Gdiplus::SolidBrush (Gdiplus::Color(255, 255, 255, 255));
-		//bkgd_ = std::make_unique<Gdiplus::Brush>(bkgd);
+		bkgd_ = std::make_unique<Gdiplus::SolidBrush>(Gdiplus::Color::White);
 	}
 
 	void Label::Render(VirtualDisplay& vd) const {
+		auto box = vd.FontBoundingBox(text_);
+
+		box.MoveCenter(x_, y_);
+
+		vd.DrawRect(box);
 		vd.DrawString(text_.c_str(), x_, y_, h_align_, v_align_);
 	}
 

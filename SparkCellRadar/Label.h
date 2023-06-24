@@ -15,7 +15,7 @@ namespace SparkCell {
 		void SetHAlign(HJustify h_align);
 		void SetVAlign(VJustify v_align);
 
-		//const Gdiplus::Brush& Background() const;
+		const Gdiplus::Brush& Background() const;
 		void SetBackground();
 
 		void Render(VirtualDisplay& vd) const;
@@ -30,7 +30,7 @@ namespace SparkCell {
 		HJustify h_align_ = { HJustify::LEFT };
 		VJustify v_align_ = { VJustify::CENTER };
 
-		std::unique_ptr<int> bkgd_;// = std::make_unique<int>(1);
+		std::unique_ptr<Gdiplus::Brush> bkgd_;
 	};
 
 }

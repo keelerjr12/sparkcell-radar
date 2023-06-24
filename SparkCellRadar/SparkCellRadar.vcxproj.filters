@@ -37,6 +37,9 @@
     <ClCompile Include="VirtualDisplay.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Rect.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RadarAircraftCallback.h">
@@ -61,6 +64,9 @@
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="VirtualDisplay.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

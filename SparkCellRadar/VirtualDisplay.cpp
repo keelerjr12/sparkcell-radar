@@ -1,4 +1,5 @@
 #include "VirtualDisplay.h"
+#include "Rect.h"
 
 namespace SparkCell {
 
@@ -15,29 +16,30 @@ namespace SparkCell {
 
 	void VirtualDisplay::DrawString(const std::wstring& txt, float x_pos, float y_pos, HJustify h_just, VJustify v_just) {
 
-		auto x_px = m_x_sz * (1 + x_pos) / 2;
-		auto y_px = m_y_sz * (1 - y_pos) / 2;
-
-		Gdiplus::RectF box;
-		m_graphics.MeasureString(txt.c_str(), txt.size(), m_fnt.get(), { 0, 0 }, &box);
+		const auto box = FontBoundingBox(txt);
+		auto x_adj = 0.f;
+		auto y_adj = 0.f;
 
 		switch (h_just) {
 		case HJustify::CENTER:
-			x_px -= box.Width / 2;
+			x_adj = box.Width() / 2.f;
 			break;
 		case HJustify::RIGHT:
-			x_px -= box.Width;
+			x_adj = box.Width();
 			break;
 		};
 
 		switch (v_just) {
 		case VJustify::CENTER:
-			y_px -= box.Height / 2;
+			y_adj = box.Height() / 2.f;
 			break;
 		case VJustify::BOTTOM:
-			y_px -= box.Height;
+			y_adj = box.Height();
 			break;
 		};
+
+		auto x_px = m_x_sz * (((1 + x_pos) / 2) - x_adj);
+		auto y_px = m_y_sz * (((1 - y_pos) / 2) - y_adj);
 
 		Gdiplus::SolidBrush  solidBrush(Gdiplus::Color(255, 255, 255, 255));
 		m_graphics.DrawString(txt.c_str(), -1, m_fnt.get(), { x_px, y_px }, &solidBrush);
@@ -62,9 +64,29 @@ namespace SparkCell {
 		m_graphics.FillRectangle(&brush, x_px, y_px, w_px, h_px);
 	}
 
+	void VirtualDisplay::DrawRect(const Rect& rect) {
+		const auto x_px = m_x_sz * (1 + rect.X()) / 2;
+		const auto y_px = m_y_sz * (1 - rect.Y()) / 2;
+		const auto w_px = m_x_sz * rect.Width();
+		const auto h_px = m_y_sz * rect.Height();
+
+		Gdiplus::SolidBrush brush(Gdiplus::Color(255, 255, 255, 255));
+		m_graphics.FillRectangle(& brush, x_px, y_px, w_px, h_px);
+		//DrawRect(rect.X(), rect.Y(), rect.Width(), rect.Height());
+	}
+
 	void VirtualDisplay::SetFontSize(float fnt_sz) {
 		m_pvc.AddFontFile(L"C:\\Users\\ADMIN\\Fonts\\B612\\B612-Regular.ttf");
 		m_fnt = std::make_unique<Gdiplus::Font>(L"B612", fnt_sz, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel, &m_pvc);
+	}
+
+	Rect VirtualDisplay::FontBoundingBox(const std::wstring& txt) const {
+		Gdiplus::RectF box;
+		m_graphics.MeasureString(txt.c_str(), txt.size(), m_fnt.get(), { 0, 0 }, &box);
+
+		const auto bb = Rect{ 0, 0, box.Width / m_x_sz, box.Height / m_y_sz };
+
+		return bb;
 	}
 
 }

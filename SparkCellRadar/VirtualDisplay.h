@@ -8,6 +8,8 @@
 
 namespace SparkCell {
 
+	class Rect;
+
 	enum class HJustify {
 		LEFT,
 		CENTER,
@@ -33,8 +35,11 @@ namespace SparkCell {
 		void DrawLine(float x1, float y1, float x2, float y2);
 
 		void DrawRect(float x, float y, float width, float height);
+		void DrawRect(const SparkCell::Rect& rect);
 
 		void SetFontSize(float fnt_sz);
+
+		Rect FontBoundingBox(const std::wstring& txt) const;
 
 	private:
 
