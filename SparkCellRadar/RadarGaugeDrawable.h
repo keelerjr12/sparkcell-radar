@@ -32,7 +32,8 @@ public:
 	virtual bool GetDraw(IGaugeCDrawableDrawParameters* pParameters) override;
 
 private:
-	void Setup();
+		
+	void Setup(PIXPOINT size, HDC hdc);
 
 	const SparkCell::Radar* const mRadar;
 	std::unique_ptr<SparkCell::VirtualDisplay> vd;

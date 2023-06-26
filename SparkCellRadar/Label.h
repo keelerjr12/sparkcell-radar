@@ -11,7 +11,7 @@ namespace SparkCell {
 
 	class Label {
 	public:
-		Label(const std::wstring& text, VirtualDisplay* vd = nullptr);
+		Label(const std::wstring& text = L"", VirtualDisplay* vd = nullptr);
 
 		void Move(float x, float y);
 		void SetHAlign(HJustify h_align);
@@ -25,7 +25,9 @@ namespace SparkCell {
 
 		Rect BoundingBox() const;
 
-		void Render(VirtualDisplay& vd) const;
+
+		void SetVD(VirtualDisplay* vd);
+		void Render() const;
 
 	private:
 

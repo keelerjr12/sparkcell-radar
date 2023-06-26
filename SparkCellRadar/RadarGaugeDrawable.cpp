@@ -51,29 +51,94 @@ std::wstring parse_aspect_angle_str(float aspect_angle) {
     return aa_str;
 }
 
+static void RenderAzimuthScale(VirtualDisplay& vd) {
+    constexpr auto NUM_TICKS_PER_SIDE = 3;
+    vd.DrawLine(0, -.72, 0, -.8172);
+
+    for (auto tick = 1; tick <= NUM_TICKS_PER_SIDE; ++tick) {
+        vd.DrawLine(tick * .16667 , -.7554, tick * .16667, -.8172);
+        vd.DrawLine(-1 * tick * .16667 , -.7554, -1 * tick * .16667, -.8172);
+    }
+
+}
+
+static void RenderElevationScale(VirtualDisplay& vd) {
+    constexpr auto NUM_TICKS_PER_SIDE = 3;
+    vd.DrawLine(-.72, 0, -.8172, 0);
+
+    for (auto tick = 1; tick <= NUM_TICKS_PER_SIDE; ++tick) {
+        vd.DrawLine(-.7554, tick * .16667 , -.8172, tick * .16667);
+        vd.DrawLine(-.7554, -1 * tick * .16667 , -.8172, -1 * tick * .16667);
+    }
+}
+
+static void RenderRangeScale(VirtualDisplay& vd) {
+    vd.DrawLine(.932, -.5, 1, -.5);
+    vd.DrawLine(.932, 0, 1, 0);
+    vd.DrawLine(.932, .5, 1, .5);
+}
+
+static void RenderHorizonLine(float bank, VirtualDisplay& vd) {
+    const auto inv_bank = -bank;
+
+    Gdiplus::Matrix rotation;
+    rotation.Rotate(inv_bank, Gdiplus::MatrixOrderAppend);
+
+    Gdiplus::Matrix a(0, 0, 0, 0, -.0857, 0);
+    a.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
+    Gdiplus::REAL tt[6] = {};
+    a.GetElements(tt);
+    
+    Gdiplus::Matrix b(0, 0, 0, 0, -.4971, 0);
+    b.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
+    Gdiplus::REAL tu[6] = {};
+    b.GetElements(tu);
+
+    vd.DrawLine(tt[4], tt[5], tu[4], tu[5]);
+    vd.DrawLine(-1*tt[4], -1*tt[5], -1*tu[4], -1*tu[5]);
+
+    Gdiplus::Matrix out_up(0, 0, 0, 0, -.4971, 0);
+    out_up.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
+    out_up.GetElements(tt);
+    Gdiplus::Matrix out_bot(0, 0, 0, 0, -.4971, -.0571);
+    out_bot.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
+    out_bot.GetElements(tu);
+
+    vd.DrawLine(tt[4], tt[5], tu[4], tu[5]);
+    vd.DrawLine(tu[4] - 2 * tt[4], tu[5] - 2 * tt[5], -tt[4], -tt[5]);
+
+}
+
 bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOINT size, HDC hdc, PIMAGE pImage)
 {
-    if (!vd) {
-        vd = std::make_unique<VirtualDisplay>(hdc, size.x, size.y);
-        Setup();
-    }
+    Setup(size, hdc);
 
     vd->Clear();
 
     for (const auto& lbl : top_lbls_) {
-        lbl.Render(*vd);
+        lbl.Render();
     }
 
     for (const auto& lbl : bottom_lbls_) {
-        lbl.Render(*vd);
+        lbl.Render();
     }
     
 	const auto range = std::to_wstring(mRadar->GetRange());
-    //vd->DrawString(range, -.92, .5, HJustify::CENTER, VJustify::TOP);
     rng_lbl.SetText(range);
-    rng_lbl.Render(*vd);
+
+    auto rng_bx = rng_lbl.BoundingBox();
+    rng_bx.MoveCenter(-.92, .5);
+    rng_lbl.Move(rng_bx.X(), rng_bx.Y());
+
+    rng_lbl.Render();
 
     vd->DrawString(L"A", -1, 0, HJustify::LEFT, VJustify::BOTTOM);
+    /*az_lbl.SetText(L"A");
+    auto az_lbl = az_lbl.BoundingBox();
+    az_lbl.MoveCenter(-.92, .5);
+    rng_lbl.Move(rng_bx.X(), rng_bx.Y());
+    rng_lbl.Render();*/
+
 	const auto azLbl = std::to_wstring(mRadar->GetAzimuth() / 10);
     vd->DrawString(azLbl, -1, 0, HJustify::LEFT, VJustify::TOP);
 
@@ -93,56 +158,13 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
         vd->DrawString(airspeed, .8171, .897, HJustify::RIGHT);
     }
 
-    // Render azimuth scale
-    auto nTicks = (mRadar->GetAzimuth() / 10) / 2;
-    vd->DrawLine(0, -.72, 0, -.8172);
+    RenderAzimuthScale(*vd.get());
 
-    for (auto tick = 1; tick <= nTicks; ++tick) {
-        vd->DrawLine(tick * .16667 , -.7554, tick * .16667, -.8172);
-        vd->DrawLine(-1 * tick * .16667 , -.7554, -1 * tick * .16667, -.8172);
-    }
+    RenderElevationScale(*vd.get());
 
-    // Render elevation scale
-    const auto pxPerTenDegs = size.y / (2 * mRadar->GetElevation() / 10);
-    nTicks = (mRadar->GetElevation() / 10) / 2;
-    vd->DrawLine(-.72, 0, -.8172, 0);
+    RenderRangeScale(*vd.get());
 
-    for (auto tick = 1; tick <= nTicks; ++tick) {
-        vd->DrawLine(-.7554, tick * .16667 , -.8172, tick * .16667);
-        vd->DrawLine(-.7554, -1 * tick * .16667 , -.8172, -1 * tick * .16667);
-    }
-
-    // Render range scale
-    vd->DrawLine(.932, -.5, 1, -.5);
-    vd->DrawLine(.932, 0, 1, 0);
-    vd->DrawLine(.932, .5, 1, .5);
-
-    // Render horizon line
-    Gdiplus::Matrix rotation;
-    rotation.Rotate(-1*mRadar->Host().bank(), Gdiplus::MatrixOrderAppend);
-
-    Gdiplus::Matrix a(0, 0, 0, 0, -.0857, 0);
-    a.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
-    Gdiplus::REAL tt[6] = {};
-    a.GetElements(tt);
-    
-    Gdiplus::Matrix b(0, 0, 0, 0, -.4971, 0);
-    b.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
-    Gdiplus::REAL tu[6] = {};
-    b.GetElements(tu);
-
-    vd->DrawLine(tt[4], tt[5], tu[4], tu[5]);
-    vd->DrawLine(-1*tt[4], -1*tt[5], -1*tu[4], -1*tu[5]);
-
-    Gdiplus::Matrix out_up(0, 0, 0, 0, -.4971, 0);
-    out_up.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
-    out_up.GetElements(tt);
-    Gdiplus::Matrix out_bot(0, 0, 0, 0, -.4971, -.0571);
-    out_bot.Multiply(&rotation, Gdiplus::MatrixOrderAppend);
-    out_bot.GetElements(tu);
-
-    vd->DrawLine(tt[4], tt[5], tu[4], tu[5]);
-    vd->DrawLine(tu[4] - 2 * tt[4], tu[5] - 2 * tt[5], -tt[4], -tt[5]);
+    RenderHorizonLine(mRadar->Host().bank(), *vd.get());
 
     // Render targets
     const auto width = .0315;
@@ -170,7 +192,6 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     vd->DrawLine(x_T - width_T / 2.f, y_T - height / 2.f, x_T - width_T / 2.f, y_T + height_T / 2.f);
     vd->DrawLine(x_T + width_T / 2.f, y_T - height / 2.f, x_T + width_T / 2.f, y_T + height_T / 2.f);
 
-
     return true;
 }
 
@@ -184,17 +205,22 @@ bool RadarGaugeDrawable::GetDraw(IGaugeCDrawableDrawParameters* pParameters)
     return false;
 }
 
-void RadarGaugeDrawable::Setup() {
+void RadarGaugeDrawable::Setup(PIXPOINT size, HDC hdc) {
+    if (vd) {
+        return;
+    }
+
+    vd = std::make_unique<VirtualDisplay>(hdc, size.x, size.y);
+    rng_lbl.SetVD(vd.get());
+
     vd->SetFontSize(vd->DisplayBox().Width() * .0371);
 
     const auto inc = 2.f / (top_lbl_strs_.size() + 1);
-
     auto x = -1.f;
-
     for (const auto& text : top_lbl_strs_) {
        x += inc;
 
-       SparkCell::Label lbl(text, *vd.get());
+       SparkCell::Label lbl(text, vd.get());
 
        auto box = lbl.BoundingBox();
        box.MoveCenter(x, 1.f);
@@ -205,11 +231,10 @@ void RadarGaugeDrawable::Setup() {
     }
 
     x = -1.f;
-
     for (const auto& text : bottom_lbl_strs_) {
        x += inc;
 
-       SparkCell::Label lbl(text, *vd.get());
+       SparkCell::Label lbl(text, vd.get());
 
        auto box = lbl.BoundingBox();
        box.MoveCenter(x, 1.f);
@@ -221,4 +246,5 @@ void RadarGaugeDrawable::Setup() {
 
     bottom_lbls_[1].SetForeground(Gdiplus::Color::Black);
     bottom_lbls_[1].SetBackground(Gdiplus::Color::White);
+
 }
