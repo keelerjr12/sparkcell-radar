@@ -42,6 +42,8 @@ private:
 
 	std::vector<SparkCell::Label> top_lbls_;
 	std::vector<SparkCell::Label> bottom_lbls_;
+
+	SparkCell::Label rng_lbl;
 };
 
 #endif // RADAR_GAUGE_DRAWABLE_H

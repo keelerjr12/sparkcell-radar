@@ -11,14 +11,17 @@ namespace SparkCell {
 
 	class Label {
 	public:
-		Label(const std::wstring& text, VirtualDisplay& vd);
+		Label(const std::wstring& text, VirtualDisplay* vd = nullptr);
 
 		void Move(float x, float y);
 		void SetHAlign(HJustify h_align);
 		void SetVAlign(VJustify v_align);
 
-		const Gdiplus::Brush& Background() const;
-		void SetBackground();
+		const Gdiplus::Color& Background() const;
+		void SetBackground(const Gdiplus::Color& color);
+		void SetForeground(const Gdiplus::Color& color); 
+
+		void SetText(const std::wstring& text);
 
 		Rect BoundingBox() const;
 
@@ -34,7 +37,9 @@ namespace SparkCell {
 		HJustify h_align_ = { HJustify::LEFT };
 		VJustify v_align_ = { VJustify::CENTER };
 
-		std::unique_ptr<Gdiplus::Brush> bkgd_;
+		Gdiplus::Color bkgd_;
+		Gdiplus::Color fgd_;
+
 		VirtualDisplay* vd_;
 	};
 

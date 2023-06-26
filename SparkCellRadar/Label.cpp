@@ -6,7 +6,8 @@ namespace SparkCell {
 	Label::Label(const std::wstring& text, VirtualDisplay& vd) 
 		: text_(text),
 		  vd_(&vd),
-		  bkgd_(std::make_unique<Gdiplus::SolidBrush>(Gdiplus::Color::Transparent)) { }
+		  bkgd_(Gdiplus::Color::Transparent),
+		  fgd_(Gdiplus::Color::White) { }
 
 	void Label::Move(float x, float y) {
 		x_ = x;
@@ -21,12 +22,20 @@ namespace SparkCell {
 		v_align_ = v_align;
 	}
 
-	const Gdiplus::Brush& Label::Background() const {
-		return *bkgd_;
+	const Gdiplus::Color& Label::Background() const {
+		return bkgd_;
 	}
 
-	void Label::SetBackground() {
-		bkgd_ = std::make_unique<Gdiplus::SolidBrush>(Gdiplus::Color::White);
+	void Label::SetBackground(const Gdiplus::Color& color) {
+		bkgd_ = color;
+	}
+
+	void Label::SetForeground(const Gdiplus::Color& color) {
+		fgd_ = color;
+	}
+		
+	void Label::SetText(const std::wstring& text) {
+		text_ = text;
 	}
 
 	Rect Label::BoundingBox() const {
@@ -37,7 +46,10 @@ namespace SparkCell {
 	void Label::Render(VirtualDisplay& vd) const {
 		auto box = vd_->FontBoundingBox(text_);
 
-		vd.DrawRect(*bkgd_.get(), x_, y_, box.Width(), box.Height());
+		vd_->SetBrush(bkgd_);
+		vd.DrawRect(x_, y_, box.Width(), box.Height());
+		
+		vd_->SetBrush(fgd_);
 		vd.DrawString(text_.c_str(), x_, y_);
 	}
 

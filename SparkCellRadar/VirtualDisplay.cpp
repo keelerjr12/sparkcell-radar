@@ -8,6 +8,7 @@ namespace SparkCell {
 		m_x_sz(x_sz),
 		m_y_sz(y_sz),
 		m_fnt(std::make_unique<Gdiplus::Font>(L"Times New Roman", 1.0)),
+		m_brush(std::make_unique<Gdiplus::SolidBrush>(Gdiplus::Color::White)),
 		m_pen(std::make_unique<Gdiplus::Pen>(Gdiplus::Color::White, 1.f)) { }
 
 	void VirtualDisplay::Clear() {
@@ -41,8 +42,7 @@ namespace SparkCell {
 		auto x_px = m_x_sz * (((1 + x_pos) / 2) - x_adj);
 		auto y_px = m_y_sz * (((1 - y_pos) / 2) - y_adj);
 
-		Gdiplus::SolidBrush  solidBrush(Gdiplus::Color(255, 255, 255, 255));
-		m_graphics.DrawString(txt.c_str(), -1, m_fnt.get(), { x_px, y_px }, &solidBrush);
+		m_graphics.DrawString(txt.c_str(), -1, m_fnt.get(), { x_px, y_px }, m_brush.get());
 	}
 
 	void VirtualDisplay::DrawLine(float x1, float y1, float x2, float y2) {
@@ -54,23 +54,26 @@ namespace SparkCell {
 		m_graphics.DrawLine(m_pen.get(), Gdiplus::Point(x1_px, y1_px), Gdiplus::Point(x2_px, y2_px));
 	}
 
-	void VirtualDisplay::DrawRect(const Gdiplus::Brush& brush, float x, float y, float width, float height) {
+	void VirtualDisplay::DrawRect(float x, float y, float width, float height) {
 		const auto x_px = m_x_sz * (1 + x) / 2;
 		const auto y_px = m_y_sz * (1 - y) / 2;
 		const auto w_px = m_x_sz / 2.f * width;
 		const auto h_px = m_y_sz / 2.f * height;
 
-		//Gdiplus::SolidBrush brush(Gdiplus::Color(255, 255, 255, 255));
-		m_graphics.FillRectangle(&brush, x_px, y_px, w_px, h_px);
+		m_graphics.FillRectangle(m_brush.get(), x_px, y_px, w_px, h_px);
 	}
 
-	void VirtualDisplay::DrawRect(const Gdiplus::Brush& brush, const Rect& rect) {
-		DrawRect(brush, rect.X(), rect.Y(), rect.Width(), rect.Height());
+	void VirtualDisplay::DrawRect(const Rect& rect) {
+		DrawRect(rect.X(), rect.Y(), rect.Width(), rect.Height());
 	}
 
 	void VirtualDisplay::SetFontSize(float fnt_sz) {
 		m_pvc.AddFontFile(L"C:\\Users\\ADMIN\\Fonts\\B612\\B612-Regular.ttf");
 		m_fnt = std::make_unique<Gdiplus::Font>(L"B612", fnt_sz, Gdiplus::FontStyleRegular, Gdiplus::UnitPixel, &m_pvc);
+	}
+
+	void VirtualDisplay::SetBrush(const Gdiplus::Color& color) {
+		m_brush = std::make_unique<Gdiplus::SolidBrush>(color);
 	}
 
 	Rect VirtualDisplay::DisplayBox() const {

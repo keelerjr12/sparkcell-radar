@@ -60,7 +60,6 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
 
     vd->Clear();
 
-    bottom_lbls_[1].SetBackground();
     for (const auto& lbl : top_lbls_) {
         lbl.Render(*vd);
     }
@@ -70,7 +69,9 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     }
     
 	const auto range = std::to_wstring(mRadar->GetRange());
-    vd->DrawString(range, -.92, .5, HJustify::CENTER, VJustify::TOP);
+    //vd->DrawString(range, -.92, .5, HJustify::CENTER, VJustify::TOP);
+    rng_lbl.SetText(range);
+    rng_lbl.Render(*vd);
 
     vd->DrawString(L"A", -1, 0, HJustify::LEFT, VJustify::BOTTOM);
 	const auto azLbl = std::to_wstring(mRadar->GetAzimuth() / 10);
@@ -152,8 +153,8 @@ bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOI
     for (const auto& target : targets) {
         auto x = (target.getATA() / mRadar->GetAzimuth()) - (width / 2.0);
         auto y = (target.getRange() * 2 / mRadar->GetRange()) - 1 + (height / 2.0);
-        const auto brush = Gdiplus::SolidBrush(Gdiplus::Color::White);
-        vd->DrawRect(brush, x, y, width, height);
+        vd->SetBrush(Gdiplus::Color::White);
+        vd->DrawRect(x, y, width, height);
 
         // alt label per target
         const auto altitude = std::to_wstring(static_cast<int>(target.getAltitude() / 1000));
@@ -214,9 +215,10 @@ void RadarGaugeDrawable::Setup() {
        box.MoveCenter(x, 1.f);
        box.MoveBottom(-1.f);
        lbl.Move(box.X(), box.Y());
-	   /*lbl.SetHAlign(HJustify::CENTER);
-	   lbl.SetVAlign(VJustify::BOTTOM);*/
 
        bottom_lbls_.emplace_back(std::move(lbl));
     }
+
+    bottom_lbls_[1].SetForeground(Gdiplus::Color::Black);
+    bottom_lbls_[1].SetBackground(Gdiplus::Color::White);
 }

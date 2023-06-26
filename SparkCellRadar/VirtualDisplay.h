@@ -34,10 +34,11 @@ namespace SparkCell {
 
 		void DrawLine(float x1, float y1, float x2, float y2);
 
-		void DrawRect(const Gdiplus::Brush& brush, float x, float y, float width, float height);
-		void DrawRect(const Gdiplus::Brush& brush, const SparkCell::Rect& rect);
+		void DrawRect(float x, float y, float width, float height);
+		void DrawRect(const SparkCell::Rect& rect);
 
 		void SetFontSize(float fnt_sz);
+		void SetBrush(const Gdiplus::Color& color);
 
 		Rect DisplayBox() const;
 		Rect FontBoundingBox(const std::wstring& txt) const;
@@ -53,6 +54,7 @@ namespace SparkCell {
 		Gdiplus::PrivateFontCollection m_pvc;
 		std::unique_ptr<Gdiplus::Font> m_fnt;
 		std::unique_ptr<Gdiplus::Pen> m_pen;
+		std::unique_ptr<Gdiplus::Brush> m_brush;
 	};
 
 }
