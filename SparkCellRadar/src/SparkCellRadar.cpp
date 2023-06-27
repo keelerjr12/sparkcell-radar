@@ -1,6 +1,6 @@
 #include "Helpers/initpdk.h"
 #include <gauges.h>
-#include "RadarPanelCallback.h"
+#include "p3d/RadarPanelCallback.h"
 
 static const char RADAR_CALLBACK_NAME[] = "SparkCellRadar";
 

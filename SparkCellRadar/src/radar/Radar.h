@@ -22,9 +22,10 @@ namespace SparkCell {
 
 		const Aircraft& Host() const { return *mHost; }
 
-		virtual int GetAzimuth() const;
-		virtual int GetElevation() const;
-		virtual int GetRange() const;
+		int GetAzimuth() const;
+		int GetElevation() const;
+		int GetBarSetting() const;
+		int GetRange() const;
 
 		int GetCursorAzimuth() const;
 		int GetCursorRange() const;

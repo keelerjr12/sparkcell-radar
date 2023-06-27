@@ -1,7 +1,7 @@
 #ifndef RADAR_AIRCRAFT_CALLBACK_H
 #define RADAR_AIRCRAFT_CALLBACK_H
 
-#include "Aircraft.h"
+#include "../radar/Aircraft.h"
 #include <gauges.h>
 
 class RadarAircraftCallback : public IAircraftCCallback {

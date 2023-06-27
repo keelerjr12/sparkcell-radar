@@ -1,78 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="RadarPanelCallback.h">
+    <ClCompile Include="src\p3d\RadarPanelCallback.h">
       <Filter>Header</Filter>
     </ClCompile>
-    <ClCompile Include="RadarAircraftCallback.cpp">
+    <ClCompile Include="src\p3d\RadarAircraftCallback.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="RadarGaugeCallback.cpp">
+    <ClCompile Include="src\p3d\RadarGaugeCallback.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="RadarGaugeDrawable.cpp">
+    <ClCompile Include="src\p3d\RadarGaugeDrawable.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="RadarPanelCallback.cpp">
+    <ClCompile Include="src\p3d\RadarPanelCallback.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="SparkCellRadar.cpp">
+    <ClCompile Include="src\SparkCellRadar.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="RadarTypes.h">
+    <ClCompile Include="src\p3d\RadarTypes.h">
       <Filter>Header</Filter>
     </ClCompile>
-    <ClCompile Include="Radar.cpp">
+    <ClCompile Include="src\radar\Radar.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Aircraft.cpp">
+    <ClCompile Include="src\radar\Aircraft.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="RadarTarget.cpp">
+    <ClCompile Include="src\radar\RadarTarget.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Label.cpp">
+    <ClCompile Include="src\ui\Label.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="VirtualDisplay.cpp">
+    <ClCompile Include="src\ui\VirtualDisplay.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Rect.cpp">
+    <ClCompile Include="src\ui\Rect.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="RadarScreen.cpp">
+    <ClCompile Include="src\radar\RadarScreen.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RadarAircraftCallback.h">
+    <ClInclude Include="src\p3d\RadarAircraftCallback.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="RadarGaugeCallback.h">
+    <ClInclude Include="src\p3d\RadarGaugeCallback.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="RadarGaugeDrawable.h">
+    <ClInclude Include="src\p3d\RadarGaugeDrawable.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Radar.h">
+    <ClInclude Include="src\radar\Radar.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Aircraft.h">
+    <ClInclude Include="src\radar\Aircraft.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="RadarTarget.h">
+    <ClInclude Include="src\radar\RadarTarget.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Label.h">
+    <ClInclude Include="src\ui\Label.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="VirtualDisplay.h">
+    <ClInclude Include="src\ui\VirtualDisplay.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="Rect.h">
+    <ClInclude Include="src\ui\Rect.h">
       <Filter>Header</Filter>
     </ClInclude>
-    <ClInclude Include="RadarScreen.h">
+    <ClInclude Include="src\radar\RadarScreen.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

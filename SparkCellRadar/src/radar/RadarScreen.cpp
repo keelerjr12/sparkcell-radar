@@ -1,6 +1,6 @@
 #include "RadarScreen.h"
 #include "Radar.h"
-#include "VirtualDisplay.h"
+#include "../ui/VirtualDisplay.h"
 
 namespace SparkCell {
 
@@ -8,7 +8,7 @@ namespace SparkCell {
 		Setup();
 	}
 
-	std::wstring parse_aspect_angle_str(float aspect_angle) {
+	static std::wstring parse_aspect_angle_str(float aspect_angle) {
 		auto suffix = 'R';
 		if (aspect_angle < 0) {
 			suffix = 'L';
@@ -79,6 +79,38 @@ namespace SparkCell {
 
 	}
 
+	static void RenderTargets(VirtualDisplay& vd, const Radar& radar) {
+		const auto width = .0315;
+		const auto height =.0315;
+
+		auto targets = radar.GetRadarTargets();
+
+		for (const auto& target : targets) {
+			auto x = (target.getATA() / radar.GetAzimuth()) - (width / 2.0);
+			auto y = (target.getRange() * 2 / radar.GetRange()) - 1 + (height / 2.0);
+			vd.SetBrush(Gdiplus::Color::White);
+			vd.DrawRect(x, y, width, height);
+
+			// alt label per target
+			const auto altitude = std::to_wstring(static_cast<int>(target.getAltitude() / 1000));
+			vd.DrawString(altitude, x + width / 2.f, y - height, HJustify::CENTER, VJustify::TOP);
+		}
+	}
+
+	static void RenderCursors(VirtualDisplay& vd, const Radar& radar) {
+		const auto width = .0315;
+		const auto height =.0315;
+
+		auto x_T = (static_cast<float>(radar.GetCursorAzimuth()) / radar.GetAzimuth()) - (width / 2.0);
+		auto y_T = (static_cast<float>(radar.GetCursorRange()) * 2 / radar.GetRange()) - 1 - (height / 2.0);
+	;
+		const auto width_T = .0622;
+		const auto height_T = .0719;
+		vd.DrawLine(x_T - width_T / 2.f, y_T - height / 2.f, x_T - width_T / 2.f, y_T + height_T / 2.f);
+		vd.DrawLine(x_T + width_T / 2.f, y_T - height / 2.f, x_T + width_T / 2.f, y_T + height_T / 2.f);
+
+	}
+
 	void RadarScreen::Render() {
 		vd_->Clear();
 
@@ -110,7 +142,7 @@ namespace SparkCell {
 		const auto azLbl = std::to_wstring(radar_->GetAzimuth() / 10);
 		vd_->DrawString(azLbl, -1, 0, HJustify::LEFT, VJustify::TOP);
 
-		const auto elLbl = std::to_wstring(radar_->GetElevation() / 10);
+		const auto elLbl = std::to_wstring(radar_->GetBarSetting());
 		vd_->DrawString(elLbl, -1, -.5, HJustify::LEFT, VJustify::BOTTOM);
 		vd_->DrawString(L"B", -1, -.5, HJustify::LEFT, VJustify::TOP);
 
@@ -134,31 +166,10 @@ namespace SparkCell {
 
 		RenderHorizonLine(radar_->Host().bank(), *vd_);
 
-		// Render targets
-		const auto width = .0315;
-		const auto height =.0315;
+		RenderTargets(*vd_, *radar_);
 
-		auto targets = radar_->GetRadarTargets();
+		RenderCursors(*vd_, *radar_);
 
-		for (const auto& target : targets) {
-			auto x = (target.getATA() / radar_->GetAzimuth()) - (width / 2.0);
-			auto y = (target.getRange() * 2 / radar_->GetRange()) - 1 + (height / 2.0);
-			vd_->SetBrush(Gdiplus::Color::White);
-			vd_->DrawRect(x, y, width, height);
-
-			// alt label per target
-			const auto altitude = std::to_wstring(static_cast<int>(target.getAltitude() / 1000));
-			vd_->DrawString(altitude, x + width / 2.f, y - height, HJustify::CENTER, VJustify::TOP);
-		}
-
-		// Render Cursors
-		auto x_T = (static_cast<float>(radar_->GetCursorAzimuth()) / radar_->GetAzimuth()) - (width / 2.0);
-		auto y_T = (static_cast<float>(radar_->GetCursorRange()) * 2 / radar_->GetRange()) - 1 - (height / 2.0);
-	;
-		const auto width_T = .0622;
-		const auto height_T = .0719;
-		vd_->DrawLine(x_T - width_T / 2.f, y_T - height / 2.f, x_T - width_T / 2.f, y_T + height_T / 2.f);
-		vd_->DrawLine(x_T + width_T / 2.f, y_T - height / 2.f, x_T + width_T / 2.f, y_T + height_T / 2.f);
 	}
 
 	void RadarScreen::Setup() {

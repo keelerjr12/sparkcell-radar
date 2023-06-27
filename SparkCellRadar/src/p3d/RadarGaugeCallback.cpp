@@ -1,8 +1,8 @@
 #include "RadarGaugeCallback.h"
-#include "Aircraft.h"
-#include "gauges.h"
-#include "Radar.h"
 #include "RadarGaugeDrawable.h"
+#include "../radar/Aircraft.h"
+#include "../radar/Radar.h"
+#include "gauges.h"
 #include "Pdk.h"
 
 #include <debugapi.h>

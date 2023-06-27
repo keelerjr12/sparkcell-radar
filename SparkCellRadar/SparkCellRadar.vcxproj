@@ -75,6 +75,18 @@
     <Import Project="PropertySheet.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -146,32 +158,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Aircraft.cpp" />
-    <ClCompile Include="Label.cpp" />
-    <ClCompile Include="Radar.cpp" />
-    <ClCompile Include="RadarAircraftCallback.cpp" />
-    <ClCompile Include="RadarScreen.cpp" />
-    <ClCompile Include="RadarTarget.cpp" />
-    <ClCompile Include="RadarTypes.h" />
-    <ClCompile Include="Rect.cpp" />
-    <ClCompile Include="SparkCellRadar.cpp" />
-    <ClCompile Include="RadarGaugeCallback.cpp" />
-    <ClCompile Include="RadarGaugeDrawable.cpp" />
-    <ClCompile Include="RadarPanelCallback.cpp" />
-    <ClCompile Include="RadarPanelCallback.h" />
-    <ClCompile Include="VirtualDisplay.cpp" />
+    <ClCompile Include="src\radar\Aircraft.cpp" />
+    <ClCompile Include="src\ui\Label.cpp" />
+    <ClCompile Include="src\radar\Radar.cpp" />
+    <ClCompile Include="src\p3d\RadarAircraftCallback.cpp" />
+    <ClCompile Include="src\radar\RadarScreen.cpp" />
+    <ClCompile Include="src\radar\RadarTarget.cpp" />
+    <ClCompile Include="src\p3d\RadarTypes.h" />
+    <ClCompile Include="src\ui\Rect.cpp" />
+    <ClCompile Include="src\SparkCellRadar.cpp" />
+    <ClCompile Include="src\p3d\RadarGaugeCallback.cpp" />
+    <ClCompile Include="src\p3d\RadarGaugeDrawable.cpp" />
+    <ClCompile Include="src\p3d\RadarPanelCallback.cpp" />
+    <ClCompile Include="src\p3d\RadarPanelCallback.h" />
+    <ClCompile Include="src\ui\VirtualDisplay.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Aircraft.h" />
-    <ClInclude Include="RadarScreen.h" />
-    <ClInclude Include="Rect.h" />
-    <ClInclude Include="Label.h" />
-    <ClInclude Include="Radar.h" />
-    <ClInclude Include="RadarAircraftCallback.h" />
-    <ClInclude Include="RadarGaugeCallback.h" />
-    <ClInclude Include="RadarGaugeDrawable.h" />
-    <ClInclude Include="RadarTarget.h" />
-    <ClInclude Include="VirtualDisplay.h" />
+    <ClInclude Include="src\radar\Aircraft.h" />
+    <ClInclude Include="src\radar\RadarScreen.h" />
+    <ClInclude Include="src\ui\Rect.h" />
+    <ClInclude Include="src\ui\Label.h" />
+    <ClInclude Include="src\radar\Radar.h" />
+    <ClInclude Include="src\p3d\RadarAircraftCallback.h" />
+    <ClInclude Include="src\p3d\RadarGaugeCallback.h" />
+    <ClInclude Include="src\p3d\RadarGaugeDrawable.h" />
+    <ClInclude Include="src\radar\RadarTarget.h" />
+    <ClInclude Include="src\ui\VirtualDisplay.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />

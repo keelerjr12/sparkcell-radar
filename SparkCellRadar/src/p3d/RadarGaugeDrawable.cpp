@@ -1,11 +1,7 @@
 #include "RadarGaugeDrawable.h"
-#include "Radar.h"
-#include "RadarScreen.h"
-#include "VirtualDisplay.h"
+#include "../radar/RadarScreen.h"
+#include "../ui/VirtualDisplay.h"
 #include <memory>
-
-using namespace SparkCell;
-
 
 RadarGaugeDrawable::RadarGaugeDrawable(const IGaugeCDrawableCreateParameters* pParams, const SparkCell::Radar* const radar) 
     : radar_(radar) { }

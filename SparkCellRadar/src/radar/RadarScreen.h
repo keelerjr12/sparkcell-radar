@@ -1,7 +1,7 @@
 #ifndef RADAR_SCREEN_H
 #define RADAR_SCREEN_H
 
-#include "Label.h"
+#include "../ui/Label.h"
 #include <string>
 #include <vector>
 
