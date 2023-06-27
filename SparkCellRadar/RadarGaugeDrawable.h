@@ -2,15 +2,12 @@
 #define RADAR_GAUGE_DRAWABLE_H
 
 #include <gauges.h>
-#include <gdiplus.h>
-#include "Label.h"
 #include <memory>
-#include <string>
-#include <vector>
-#include "VirtualDisplay.h"
 
 namespace SparkCell {
 	class Radar;
+	class RadarScreen;
+	class VirtualDisplay;
 }
 
 enum RadarGaugeDrawableId {
@@ -21,7 +18,6 @@ class RadarGaugeDrawable : public IGaugeCDrawable {
 public:
 	RadarGaugeDrawable(const IGaugeCDrawableCreateParameters* pParams, const SparkCell::Radar* const radar);
 
-	// Inherited via IGaugeCDrawable
 	virtual ULONG AddRef() override;
 	virtual ULONG Release() override;
 	virtual FLAGS32 GetFlags() override;
@@ -32,19 +28,11 @@ public:
 	virtual bool GetDraw(IGaugeCDrawableDrawParameters* pParameters) override;
 
 private:
-		
-	void Setup(PIXPOINT size, HDC hdc);
 
-	const SparkCell::Radar* const mRadar;
-	std::unique_ptr<SparkCell::VirtualDisplay> vd;
+	std::unique_ptr<SparkCell::VirtualDisplay> vd_;
+	std::unique_ptr<SparkCell::RadarScreen> radar_screen_;
+	const SparkCell::Radar* const radar_;
 
-	std::vector<std::wstring> top_lbl_strs_ { L"CRM", L"RWS", L"NORM", L"OVRD", L"CNTL" };
-	std::vector<std::wstring> bottom_lbl_strs_ { L"SWAP", L"FCR", L"HSD", L"WPN", L"DCLT" };
-
-	std::vector<SparkCell::Label> top_lbls_;
-	std::vector<SparkCell::Label> bottom_lbls_;
-
-	SparkCell::Label rng_lbl;
 };
 
 #endif // RADAR_GAUGE_DRAWABLE_H

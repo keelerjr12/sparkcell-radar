@@ -25,8 +25,6 @@ namespace SparkCell {
 
 		Rect BoundingBox() const;
 
-
-		void SetVD(VirtualDisplay* vd);
 		void Render() const;
 
 	private:

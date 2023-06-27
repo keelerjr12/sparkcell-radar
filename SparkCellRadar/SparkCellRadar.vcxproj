@@ -150,6 +150,7 @@
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="Radar.cpp" />
     <ClCompile Include="RadarAircraftCallback.cpp" />
+    <ClCompile Include="RadarScreen.cpp" />
     <ClCompile Include="RadarTarget.cpp" />
     <ClCompile Include="RadarTypes.h" />
     <ClCompile Include="Rect.cpp" />
@@ -162,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aircraft.h" />
+    <ClInclude Include="RadarScreen.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Label.h" />
     <ClInclude Include="Radar.h" />

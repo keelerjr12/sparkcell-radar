@@ -42,11 +42,6 @@ namespace SparkCell {
 		return vd_->FontBoundingBox(text_);
 	}
 
-	void Label::SetVD(VirtualDisplay* vd) {
-		vd_ = vd;
-	}
-
-	// TODO: remove VD
 	void Label::Render() const {
 		auto box = vd_->FontBoundingBox(text_);
 
