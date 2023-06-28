@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <SimBase.Document Type="ObjectFile" version="5,3">
+    <Descr> </Descr>
     <Title>Lockheed Martin F-35A Lightning II F35 - 2023-01-26 05-32-39</Title>
     <WorldBase.Flight>
         <SimContain.UserOwnship InstanceId="{1CCF6D89-BA36-445F-B5C8-47571ABC0773}">
@@ -14,8 +15,8 @@
             <AltitudeIsAGL>True</AltitudeIsAGL>
             <ContainerID>0</ContainerID>
             <IsOnGround>False</IsOnGround>
-            <WorldPosition>N34° 21' 52.287014",W99° 48' 51.024571",+024000.00</WorldPosition>
-            <Orientation>1.999992,0.000000,180.000008</Orientation>
+            <WorldPosition>N34° 13' 23.840908",W99° 48' 3.608970",+024000.00</WorldPosition>
+            <Orientation>0.000000,0.000000,180.000046</Orientation>
             <ContainerTitle>F-16</ContainerTitle>
         </SimContain.Container>
     </WorldBase.Flight>

@@ -172,6 +172,8 @@
     <ClCompile Include="src\p3d\RadarPanelCallback.cpp" />
     <ClCompile Include="src\p3d\RadarPanelCallback.h" />
     <ClCompile Include="src\ui\VirtualDisplay.cpp" />
+    <ClCompile Include="src\util\Location.cpp" />
+    <ClCompile Include="src\util\Math.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\radar\Aircraft.h" />
@@ -184,6 +186,8 @@
     <ClInclude Include="src\p3d\RadarGaugeDrawable.h" />
     <ClInclude Include="src\radar\RadarTarget.h" />
     <ClInclude Include="src\ui\VirtualDisplay.h" />
+    <ClInclude Include="src\util\Location.h" />
+    <ClInclude Include="src\util\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />

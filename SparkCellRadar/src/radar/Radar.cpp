@@ -51,7 +51,7 @@ namespace SparkCell {
 				const auto targetAircraft = Aircraft(aiObject);
 				const auto tgt = RadarTarget(*mHost, targetAircraft);
 
-				if (abs(tgt.getATA()) <= GetAzimuth()) {
+				if (abs(tgt.ATA()) <= GetAzimuth()) {
 					mRadarTargets.push_back(tgt);
 				}
 			}
@@ -86,12 +86,9 @@ namespace SparkCell {
 	void Radar::TryLock()
 	{
 		for (const auto& tgt : this->mRadarTargets) {
-			const auto ang_diff = 180.f - std::abs(std::abs(m_cursor_az - tgt.getBearing()) - 180.f);
-			if (ang_diff < 3.0f && abs(m_cursor_rng - tgt.getRange()) < 1.0f)
-			{
+			if (IsCursorNear(tgt)) {
 				this->mLockedTarget = &tgt;
-			}
-			else {
+			} else {
 				this->mLockedTarget = nullptr;
 			}
 		}
@@ -103,6 +100,18 @@ namespace SparkCell {
 
 	int Radar::GetCursorRange() const {
 		return static_cast<int>(m_cursor_rng);
+	}
+
+	bool Radar::IsCursorNear(const RadarTarget& tgt) const {
+		const auto NUM_DEGS = 3.0f;
+		const auto NUM_MILES = 1.0f;
+
+		const auto ang_diff = std::abs(180.f - std::abs(std::abs(m_cursor_az - tgt.Bearing()) - 180.f));
+		if (ang_diff < NUM_DEGS && abs(m_cursor_rng - tgt.Range()) < NUM_MILES) {
+			return true;
+		}
+
+		return false;
 	}
 
 	int Radar::GetAzimuth() const {

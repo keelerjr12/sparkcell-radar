@@ -22,7 +22,7 @@ namespace SparkCell {
 		v_align_ = v_align;
 	}
 
-	const Gdiplus::Color& Label::Background() const {
+	Gdiplus::Color Label::Background() const {
 		return bkgd_;
 	}
 

@@ -12,20 +12,21 @@ namespace SparkCell {
 	public:
 		RadarTarget(const Aircraft& host, const Aircraft& tgt);
 
-		float getAirspeed() const { return mTarget.airspeed(); }
-		float getAltitude() const { return mTarget.alt(); }
+		float Airspeed() const;
+		float Altitude() const;
 
-		float getBearing() const;
-		float getRange() const;
-		float getHeading() const;
+		float Bearing() const;
+		float Range() const;
+		float Heading() const;
 
-		float getAA() const;
-		float getATA() const;
+		float AA() const;
+		float ATA() const;
 
 	private:
 
-		Aircraft mHost;
-		Aircraft mTarget;
+		// TODO: pointers?
+		Aircraft host_;
+		Aircraft target_;
 	};
 
 }

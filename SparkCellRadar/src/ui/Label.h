@@ -17,7 +17,7 @@ namespace SparkCell {
 		void SetHAlign(HJustify h_align);
 		void SetVAlign(VJustify v_align);
 
-		const Gdiplus::Color& Background() const;
+		Gdiplus::Color Background() const;
 		void SetBackground(const Gdiplus::Color& color);
 		void SetForeground(const Gdiplus::Color& color); 
 

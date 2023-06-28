@@ -265,37 +265,37 @@
             <Property Name="PostProcess.1" Value="FXAAResolve" />
         </Section>
         <Section Name="Camera.1.21">
-            <Property Name="Guid" Value="{57A3758A-D596-4260-8AF0-302A5E4DF5CE}" />
-            <Property Name="Title" Value="IR (White Hot)" />
+            <Property Name="Guid" Value="{C66CEF57-C2C3-4750-90E4-6CC166E88DDA}" />
+            <Property Name="Title" Value="Cigi View External" />
             <Property Name="PanelOnlyView" Value="False" />
-            <Property Name="Zoom" Value="0.30000001192092895508" />
+            <Property Name="Zoom" Value="1" />
             <Property Name="Translation" Value="0, 0, 0" />
-            <Property Name="SensorMode" Value="1" />
+            <Property Name="SensorMode" Value="0" />
             <Property Name="Rotation" Value="0, 0, 0" />
             <Property Name="FieldOfView" Value="0, 0" />
             <Property Name="PostProcess.0" Value="NVGBloomPostProcess" />
             <Property Name="PostProcess.1" Value="HDRPostProcess" />
         </Section>
         <Section Name="Camera.1.22">
-            <Property Name="Guid" Value="{DD3A45A5-C8BE-417A-B69E-32F402D56F36}" />
-            <Property Name="Title" Value="IR (Black Hot)" />
+            <Property Name="Guid" Value="{B2BAED10-12E9-44BF-8E09-F327278FEE4D}" />
+            <Property Name="Title" Value="Weather Radar Top-Down" />
             <Property Name="PanelOnlyView" Value="False" />
-            <Property Name="Zoom" Value="0.30000001192092895508" />
+            <Property Name="Zoom" Value="256" />
             <Property Name="Translation" Value="0, 0, 0" />
-            <Property Name="SensorMode" Value="2" />
+            <Property Name="SensorMode" Value="3" />
             <Property Name="Rotation" Value="0, 0, 0" />
             <Property Name="FieldOfView" Value="0, 0" />
-            <Property Name="PostProcess.0" Value="InvertColor" />
+            <Property Name="PostProcess.0" Value="GDataWeatherRadar" />
             <Property Name="PostProcess.1" Value="GreenScaleInverter" />
             <Property Name="PostProcess.2" Value="HDRPostProcess" />
         </Section>
         <Section Name="Camera.1.23">
-            <Property Name="Guid" Value="{61C3B6FB-FF9E-4B9C-978E-AA7C7F70F5A9}" />
-            <Property Name="Title" Value="NVG (White Hot)" />
+            <Property Name="Guid" Value="{57A3758A-D596-4260-8AF0-302A5E4DF5CE}" />
+            <Property Name="Title" Value="IR (White Hot)" />
             <Property Name="PanelOnlyView" Value="False" />
             <Property Name="Zoom" Value="0.30000001192092895508" />
             <Property Name="Translation" Value="0, 0, 0" />
-            <Property Name="SensorMode" Value="0" />
+            <Property Name="SensorMode" Value="1" />
             <Property Name="Rotation" Value="0, 0, 0" />
             <Property Name="FieldOfView" Value="0, 0" />
             <Property Name="PostProcess.0" Value="NVGBloomPostProcess" />
@@ -412,27 +412,13 @@
             <Property Name="HiddenOn" Value="False" />
             <Property Name="Locked" Value="False" />
             <Property Name="NoUniPix" Value="False" />
-            <Property Name="ID" Value="1" />
+            <Property Name="ID" Value="-1" />
             <Property Name="ViewsOn" Value="0" />
             <Property Name="Adapter_Number" Value="0" />
             <Property Name="ParentWindowTitle" Value=" " />
-            <Property Name="OriginalID" Value="1" />
+            <Property Name="OriginalID" Value="-1" />
         </Section>
         <Section Name="Panel.5">
-            <Property Name="ScreenUniCoords" Value="0, 0, 0, 0" />
-            <Property Name="UndocCoords" Value="0, 0, 0, 0" />
-            <Property Name="Visible" Value="False" />
-            <Property Name="Undocked" Value="False" />
-            <Property Name="HiddenOn" Value="False" />
-            <Property Name="Locked" Value="False" />
-            <Property Name="NoUniPix" Value="False" />
-            <Property Name="ID" Value="257" />
-            <Property Name="ViewsOn" Value="0" />
-            <Property Name="Adapter_Number" Value="0" />
-            <Property Name="ParentWindowTitle" Value=" " />
-            <Property Name="OriginalID" Value="257" />
-        </Section>
-        <Section Name="Panel.6">
             <Property Name="ScreenUniCoords" Value="0, 0, 0, 0" />
             <Property Name="UndocCoords" Value="0, 0, 0, 0" />
             <Property Name="Visible" Value="False" />
@@ -446,6 +432,20 @@
             <Property Name="ParentWindowTitle" Value=" " />
             <Property Name="OriginalID" Value="-1" />
         </Section>
+        <Section Name="Panel.6">
+            <Property Name="ScreenUniCoords" Value="0, 0, 0, 0" />
+            <Property Name="UndocCoords" Value="0, 0, 0, 0" />
+            <Property Name="Visible" Value="False" />
+            <Property Name="Undocked" Value="False" />
+            <Property Name="HiddenOn" Value="False" />
+            <Property Name="Locked" Value="False" />
+            <Property Name="NoUniPix" Value="False" />
+            <Property Name="ID" Value="-1" />
+            <Property Name="ViewsOn" Value="0" />
+            <Property Name="Adapter_Number" Value="0" />
+            <Property Name="ParentWindowTitle" />
+            <Property Name="OriginalID" Value="-1" />
+        </Section>
         <Section Name="Panel.7">
             <Property Name="ScreenUniCoords" Value="0, 0, 0, 0" />
             <Property Name="UndocCoords" Value="0, 0, 0, 0" />
@@ -457,7 +457,7 @@
             <Property Name="ID" Value="-1" />
             <Property Name="ViewsOn" Value="0" />
             <Property Name="Adapter_Number" Value="0" />
-            <Property Name="ParentWindowTitle" Value=" " />
+            <Property Name="ParentWindowTitle" />
             <Property Name="OriginalID" Value="-1" />
         </Section>
         <Section Name="Panel.20">
@@ -787,9 +787,9 @@
             <Property Name="Descr" Value="UserOwnship1" />
         </Section>
         <Section Name="SimVars.0">
-            <Property Name="Latitude" Value="N33&#xB0; 52&apos; 55.29&quot;" />
+            <Property Name="Latitude" Value="N33&#xB0; 53&apos; 2.85&quot;" />
             <Property Name="Longitude" Value="W99&#xB0; 48&apos; 13.78&quot;" />
-            <Property Name="Altitude" Value="+022014.54" />
+            <Property Name="Altitude" Value="+022019.24" />
             <Property Name="Pitch" Value="0" />
             <Property Name="Bank" Value="0" />
             <Property Name="Heading" Value="0" />
@@ -798,7 +798,7 @@
             <Property Name="HVelBodyAxis" Value="0" />
             <Property Name="XVelBodyAxis" Value="0" />
             <Property Name="YVelBodyAxis" Value="0" />
-            <Property Name="ZVelBodyAxis" Value="708.88013998147380335" />
+            <Property Name="ZVelBodyAxis" Value="708.88013998111307501" />
             <Property Name="SimOnGround" Value="False" />
             <Property Name="OnPlatformHeight" Value="-9999999999" />
             <Property Name="AssociationID" Value="0" />
@@ -977,9 +977,9 @@
             <Property Name="LeftFlap" Value="000.00" />
             <Property Name="RightFlap" Value="000.00" />
             <Property Name="GearsHandle" Value="000.01" />
-            <Property Name="Gear1" Value="099.54" />
-            <Property Name="Gear2" Value="099.54" />
-            <Property Name="Gear3" Value="099.54" />
+            <Property Name="Gear1" Value="099.51" />
+            <Property Name="Gear2" Value="099.51" />
+            <Property Name="Gear3" Value="099.51" />
             <Property Name="YokeY" Value="050.00" />
             <Property Name="YokeX" Value="050.00" />
             <Property Name="Rudder" Value="050.00" />
@@ -999,9 +999,9 @@
             <Property Name="ContainerTitle" Value="Civilian Male White Shirt Blue Jeans" />
             <Property Name="UserCamera" Value="{00000000-0000-0000-0000-000000000000}" />
             <Property Name="AvatarCamera" Value="{00000000-0000-0000-0000-000000000000}" />
-            <Property Name="Latitude" Value="N33&#xB0; 52&apos; 55.29&quot;" />
+            <Property Name="Latitude" Value="N33&#xB0; 53&apos; 2.85&quot;" />
             <Property Name="Longitude" Value="W99&#xB0; 48&apos; 13.78&quot;" />
-            <Property Name="Altitude" Value="+022014.54" />
+            <Property Name="Altitude" Value="+022019.24" />
             <Property Name="Pitch" Value="0" />
             <Property Name="Bank" Value="0" />
             <Property Name="Heading" Value="0" />
@@ -1040,6 +1040,31 @@
             <Property Name="DurationTotal" Value="13.38885498046875" />
         </Section>
         <Section Name="Camera.1.24">
+            <Property Name="Guid" Value="{DD3A45A5-C8BE-417A-B69E-32F402D56F36}" />
+            <Property Name="Title" Value="IR (Black Hot)" />
+            <Property Name="PanelOnlyView" Value="False" />
+            <Property Name="Zoom" Value="0.30000001192092895508" />
+            <Property Name="Translation" Value="0, 0, 0" />
+            <Property Name="SensorMode" Value="2" />
+            <Property Name="Rotation" Value="0, 0, 0" />
+            <Property Name="FieldOfView" Value="0, 0" />
+            <Property Name="PostProcess.0" Value="InvertColor" />
+            <Property Name="PostProcess.1" Value="HDRPostProcess" />
+            <Property Name="PostProcess.2" Value="HDRPostProcess" />
+        </Section>
+        <Section Name="Camera.1.25">
+            <Property Name="Guid" Value="{61C3B6FB-FF9E-4B9C-978E-AA7C7F70F5A9}" />
+            <Property Name="Title" Value="NVG (White Hot)" />
+            <Property Name="PanelOnlyView" Value="False" />
+            <Property Name="Zoom" Value="0.30000001192092895508" />
+            <Property Name="Translation" Value="0, 0, 0" />
+            <Property Name="SensorMode" Value="0" />
+            <Property Name="Rotation" Value="0, 0, 0" />
+            <Property Name="FieldOfView" Value="0, 0" />
+            <Property Name="PostProcess.0" Value="NVGBloomPostProcess" />
+            <Property Name="PostProcess.1" Value="HDRPostProcess" />
+        </Section>
+        <Section Name="Camera.1.26">
             <Property Name="Guid" Value="{28212611-2528-4BD4-B944-565C30A39985}" />
             <Property Name="Title" Value="NVG (Black Hot)" />
             <Property Name="PanelOnlyView" Value="False" />
@@ -1052,7 +1077,7 @@
             <Property Name="PostProcess.1" Value="GreenScaleInverter" />
             <Property Name="PostProcess.2" Value="HDRPostProcess" />
         </Section>
-        <Section Name="Camera.1.25">
+        <Section Name="Camera.1.27">
             <Property Name="Guid" Value="{037AB312-F502-4900-A853-581C9544F971}" />
             <Property Name="Title" Value="RadarCamera" />
             <Property Name="PanelOnlyView" Value="False" />
@@ -1062,6 +1087,27 @@
             <Property Name="Rotation" Value="0, 0, 0" />
             <Property Name="FieldOfView" Value="0, 0" />
             <Property Name="PostProcess.0" Value="NVGBloomPostProcess" />
+        </Section>
+        <Section Name="Camera.1.28">
+            <Property Name="Guid" Value="{73328F45-7A98-4247-B443-9C3AB3C0763D}" />
+            <Property Name="Title" Value="Terrain Awareness" />
+            <Property Name="PanelOnlyView" Value="False" />
+            <Property Name="Zoom" Value="1" />
+            <Property Name="Translation" Value="0, 0, 0" />
+            <Property Name="SensorMode" Value="3" />
+            <Property Name="Rotation" Value="0, 0, 0" />
+            <Property Name="FieldOfView" Value="0, 0" />
+            <Property Name="PostProcess.0" Value="TerrainAwareness" />
+        </Section>
+        <Section Name="Camera.1.29">
+            <Property Name="Guid" Value="{037AB312-F502-4900-A853-581C9544F974}" />
+            <Property Name="Title" Value="WeatherRadar" />
+            <Property Name="PanelOnlyView" Value="False" />
+            <Property Name="Zoom" Value="1" />
+            <Property Name="Translation" Value="0, 0, 0" />
+            <Property Name="SensorMode" Value="3" />
+            <Property Name="Rotation" Value="0, 0, 0" />
+            <Property Name="FieldOfView" Value="0, 0" />
         </Section>
     </Flight.Sections>
 </SimBase.Document>

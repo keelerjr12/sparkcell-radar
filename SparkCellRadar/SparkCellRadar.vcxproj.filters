@@ -43,6 +43,8 @@
     <ClCompile Include="src\radar\RadarScreen.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="src\util\Math.cpp" />
+    <ClCompile Include="src\util\Location.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\p3d\RadarAircraftCallback.h">
@@ -75,6 +77,8 @@
     <ClInclude Include="src\radar\RadarScreen.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="src\util\Math.h" />
+    <ClInclude Include="src\util\Location.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

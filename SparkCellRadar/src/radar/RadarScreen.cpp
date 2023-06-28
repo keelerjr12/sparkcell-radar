@@ -29,7 +29,6 @@ namespace SparkCell {
 			vd_.DrawLine(tick * .16667, -.7554, tick * .16667, -.8172);
 			vd_.DrawLine(-1 * tick * .16667, -.7554, -1 * tick * .16667, -.8172);
 		}
-
 	}
 
 	static void RenderElevationScale(VirtualDisplay& vd_) {
@@ -79,6 +78,11 @@ namespace SparkCell {
 
 	}
 
+	// TODO: use the cursor position to show bullseye (SPS for now)
+	static void RenderBullseye() {
+
+	}
+
 	static void RenderTargets(VirtualDisplay& vd, const Radar& radar) {
 		const auto width = .0315;
 		const auto height =.0315;
@@ -86,29 +90,40 @@ namespace SparkCell {
 		auto targets = radar.GetRadarTargets();
 
 		for (const auto& target : targets) {
-			auto x = (target.getATA() / radar.GetAzimuth()) - (width / 2.0);
-			auto y = (target.getRange() * 2 / radar.GetRange()) - 1 + (height / 2.0);
+			auto x = target.ATA() / radar.GetAzimuth();
+			auto y = (target.Range() * 2 / radar.GetRange()) - 1;
+
+			Rect rc{ 0, 0, width, height };
+			rc.MoveCenter(x, y);
+
 			vd.SetBrush(Gdiplus::Color::White);
-			vd.DrawRect(x, y, width, height);
+			vd.DrawRect(rc);
 
 			// alt label per target
-			const auto altitude = std::to_wstring(static_cast<int>(target.getAltitude() / 1000));
-			vd.DrawString(altitude, x + width / 2.f, y - height, HJustify::CENTER, VJustify::TOP);
+			if (radar.IsCursorNear(target)) {
+				const auto altitude = std::to_wstring(static_cast<int>(target.Altitude() / 1000));
+
+				Label alt_lbl{ altitude, &vd };
+				auto alt_rc = alt_lbl.BoundingBox();
+				alt_rc.MoveCenter(rc.CenterX(), rc.Y());
+				alt_rc.MoveTop(rc.Y() - rc.Height());
+
+				vd.DrawString(altitude, alt_rc.X(), alt_rc.Y());
+			}
 		}
 	}
 
 	static void RenderCursors(VirtualDisplay& vd, const Radar& radar) {
-		const auto width = .0315;
-		const auto height =.0315;
+		const auto width = .066;
+		const auto height =.066;
 
-		auto x_T = (static_cast<float>(radar.GetCursorAzimuth()) / radar.GetAzimuth()) - (width / 2.0);
-		auto y_T = (static_cast<float>(radar.GetCursorRange()) * 2 / radar.GetRange()) - 1 - (height / 2.0);
-	;
-		const auto width_T = .0622;
-		const auto height_T = .0719;
-		vd.DrawLine(x_T - width_T / 2.f, y_T - height / 2.f, x_T - width_T / 2.f, y_T + height_T / 2.f);
-		vd.DrawLine(x_T + width_T / 2.f, y_T - height / 2.f, x_T + width_T / 2.f, y_T + height_T / 2.f);
+		auto x = (static_cast<float>(radar.GetCursorAzimuth()) / radar.GetAzimuth());
+		auto y = (static_cast<float>(radar.GetCursorRange()) * 2 / radar.GetRange()) - 1;
+		Rect rc{ 0, 0, width, height };
+		rc.MoveCenter(x, y);
 
+		vd.DrawLine(rc.BottomLeftX(), rc.BottomLeftY(), rc.TopLeftX(), rc.TopLeftY());
+		vd.DrawLine(rc.BottomRightX(), rc.BottomRightY(), rc.TopRightX(), rc.TopRightY());
 	}
 
 	void RadarScreen::Render() {
@@ -148,13 +163,13 @@ namespace SparkCell {
 
 		// Render locked target params
 		if (radar_->GetLockedTarget()) {
-			const auto aspect = parse_aspect_angle_str(radar_->GetLockedTarget()->getAA());
+			const auto aspect = parse_aspect_angle_str(radar_->GetLockedTarget()->AA());
 			vd_->DrawString(aspect, -.8171, .897);
 
-			const auto track = std::to_wstring(static_cast<int>(radar_->GetLockedTarget()->getHeading())); // TODO: this should actuall be rounded to nearest 10
+			const auto track = std::to_wstring(static_cast<int>(radar_->GetLockedTarget()->Heading())); // TODO: this should actuall be rounded to nearest 10
 			vd_->DrawString(track, -.6571, .897);
 
-			const auto airspeed = std::to_wstring(static_cast<int>(radar_->GetLockedTarget()->getAirspeed())); // TODO: this should actuall be rounded to nearest 10
+			const auto airspeed = std::to_wstring(static_cast<int>(radar_->GetLockedTarget()->Airspeed())); // TODO: this should actuall be rounded to nearest 10
 			vd_->DrawString(airspeed, .8171, .897, HJustify::RIGHT);
 		}
 
@@ -165,6 +180,8 @@ namespace SparkCell {
 		RenderRangeScale(*vd_);
 
 		RenderHorizonLine(radar_->Host().bank(), *vd_);
+
+		RenderBullseye();
 
 		RenderTargets(*vd_, *radar_);
 

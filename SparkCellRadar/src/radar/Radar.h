@@ -30,8 +30,10 @@ namespace SparkCell {
 		int GetCursorAzimuth() const;
 		int GetCursorRange() const;
 
-		virtual std::vector<RadarTarget> GetRadarTargets() const;
-		virtual const RadarTarget* const GetLockedTarget() const;
+		bool IsCursorNear(const RadarTarget& tgt) const;
+
+		std::vector<RadarTarget> GetRadarTargets() const;
+		const RadarTarget* const GetLockedTarget() const;
 
 	private:
 		std::vector<RadarTarget> mRadarTargets;

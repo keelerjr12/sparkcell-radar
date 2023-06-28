@@ -7,10 +7,25 @@ namespace SparkCell {
 	public:
 		Rect(float x, float y, float width, float height);
 
-		float X() const { return x_; }
-		float Y() const { return y_; }
-		float Width() const { return width_; }
-		float Height() const { return height_; }
+		float X() const;
+		float Y() const;
+		float Width() const;
+		float Height() const;
+
+		//TODO: convert all of these to a point objects
+		float CenterX() const;
+
+		float BottomLeftX() const;
+		float BottomLeftY() const;
+
+		float BottomRightX() const;
+		float BottomRightY() const;
+
+		float TopLeftX() const;
+		float TopLeftY() const;
+
+		float TopRightX() const;
+		float TopRightY() const;
 
 		void MoveTop(float y);
 		void MoveCenter(float x, float y);
