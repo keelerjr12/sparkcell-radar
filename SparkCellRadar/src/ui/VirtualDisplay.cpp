@@ -76,6 +76,10 @@ namespace SparkCell {
 		m_brush = std::make_unique<Gdiplus::SolidBrush>(color);
 	}
 
+	void VirtualDisplay::SetPen(const Gdiplus::Color& color) {
+		m_pen = std::make_unique<Gdiplus::Pen>(color);
+	}
+
 	Rect VirtualDisplay::DisplayBox() const {
 		return Rect{ 0.f, 0.f, static_cast<float>(m_x_sz), static_cast<float>(m_y_sz)};
 	}

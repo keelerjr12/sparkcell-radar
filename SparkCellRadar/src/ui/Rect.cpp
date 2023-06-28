@@ -56,16 +56,20 @@ namespace SparkCell {
 		return Y();
 	}
 
-	void Rect::MoveTop(float y) {
-		y_ = y;
-	}
-
 	void Rect::MoveCenter(float x, float y) {
 		x_ = x - Width() / 2;
 		y_ = y + Height() / 2;
 	}
 
+	void Rect::MoveTop(float y) {
+		y_ = y;
+	}
+
 	void Rect::MoveBottom(float y) {
 		y_ = y + height_;
+	}
+
+	void Rect::MoveLeft(float x) {
+		x_ = x;
 	}
 }

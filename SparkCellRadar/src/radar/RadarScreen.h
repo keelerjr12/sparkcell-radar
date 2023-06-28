@@ -32,6 +32,12 @@ namespace SparkCell {
 		std::vector<Label> bottom_lbls_;
 
 		SparkCell::Label rng_lbl_;
+
+		SparkCell::Label a_lbl_;
+		SparkCell::Label az_lbl_;
+
+		SparkCell::Label el_b_lbl_;
+		SparkCell::Label b_lbl_;
 	};
 
 }

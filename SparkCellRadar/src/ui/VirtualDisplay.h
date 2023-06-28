@@ -39,6 +39,7 @@ namespace SparkCell {
 
 		void SetFontSize(float fnt_sz);
 		void SetBrush(const Gdiplus::Color& color);
+		void SetPen(const Gdiplus::Color& color);
 
 		Rect DisplayBox() const;
 		Rect FontBoundingBox(const std::wstring& txt) const;

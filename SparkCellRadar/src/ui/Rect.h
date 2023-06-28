@@ -27,9 +27,12 @@ namespace SparkCell {
 		float TopRightX() const;
 		float TopRightY() const;
 
-		void MoveTop(float y);
 		void MoveCenter(float x, float y);
+
+		void MoveTop(float y);
 		void MoveBottom(float y);
+
+		void MoveLeft(float y);
 
 	private:
 		float x_;
