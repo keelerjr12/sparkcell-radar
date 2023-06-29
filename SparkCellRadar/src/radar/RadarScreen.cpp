@@ -1,6 +1,8 @@
 #include "RadarScreen.h"
 #include "Radar.h"
 #include "../ui/VirtualDisplay.h"
+#include "../util/Location.h"
+#include "../util/Math.h"
 
 namespace SparkCell {
 
@@ -70,8 +72,46 @@ namespace SparkCell {
 	}
 
 	// TODO: use the cursor position to show bullseye (SPS for now)
-	static void RenderBullseye() {
+	static void RenderBullseye(VirtualDisplay& vd, const Radar& radar, float ac_lat, float ac_lon) {
+		// auto cursor = get_cursors()
+		// 
 
+		auto bng_be = CalculateBearing(33.9872875, -98.5934719, ac_lat, ac_lon);
+		auto rng_be = CalculateRange(33.9872875, -98.5934719, ac_lat, ac_lon);
+
+		Gdiplus::Matrix m;
+		m.Rotate(-bng_be);
+		m.Scale(1, rng_be, Gdiplus::MatrixOrderPrepend);
+		m.Translate(0, 1, Gdiplus::MatrixOrderPrepend);
+
+		Gdiplus::REAL tt[6] = {};
+		m.GetElements(tt);
+
+		const auto ac_hdg = radar.Host().heading();
+		const auto crs_az = radar.GetCursorAzimuth();
+		const auto crs_rng = radar.GetCursorRange(); 
+
+		auto const crs_bng = ac_hdg + crs_az;
+
+		Gdiplus::Matrix n;
+		n.Rotate(-crs_bng);
+		n.Scale(1, crs_rng, Gdiplus::MatrixOrderPrepend);
+		n.Translate(0, 1, Gdiplus::MatrixOrderPrepend);
+
+		Gdiplus::REAL tu[6] = {};
+		n.GetElements(tu);
+
+		const auto x = tt[4] + tu[4];
+		const auto y = tt[5] + tu[5];
+		auto rng = static_cast<int>(std::round(std::sqrt(x * x + y * y)));
+		auto rng_str = std::to_wstring(rng);
+
+		vd.DrawString(rng_str, -.75, -.75);
+
+		const auto ang = static_cast<int>(std::round(ToDegrees(3.14159/2 - std::atan2f(y, x))+360)) % 360;
+		auto ang_str = std::to_wstring(ang);
+
+		vd.DrawString(ang_str, -1, -.75);
 	}
 
 	static std::wstring StringifyAspectAngle(float aspect_angle) {
@@ -190,7 +230,7 @@ namespace SparkCell {
 
 		RenderHorizonLine(radar_->Host().bank(), *vd_);
 
-		RenderBullseye();
+		RenderBullseye(*vd_, *radar_, radar_->Host().lat(), radar_->Host().lon());
 
 		RenderTargets(*vd_, *radar_);
 
