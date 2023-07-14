@@ -31,10 +31,9 @@ namespace SparkCell {
 	static constexpr float DEFAULT_HORZ_SLEW_RATE = .5f;
 	static constexpr float DEFAULT_VERT_SLEW_RATE = .5f;
 
-	void Radar::Update() {
-		mRadarTargets.clear();
+	void Radar::Update(const std::vector<RadarTarget>& targets) {
 
-		CComPtr<P3D::IBaseObjectV400> spUserAvatar;
+		/*CComPtr<P3D::IBaseObjectV400> spUserAvatar;
 		P3D::PdkServices::GetSimObjectManager()->GetUserAvatar(&spUserAvatar);
 
 		auto userAvatarId = spUserAvatar->GetId();
@@ -57,6 +56,13 @@ namespace SparkCell {
 				if (abs(tgt.ATA()) <= GetAzimuth()) {
 					mRadarTargets.push_back(tgt);
 				}
+			}
+		}*/
+		mRadarTargets.clear();
+
+		for (const auto& tgt : targets) {
+			if (std::abs(tgt.ATA()) <= GetAzimuth()) {
+				mRadarTargets.push_back(tgt);
 			}
 		}
 
