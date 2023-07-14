@@ -13,10 +13,10 @@ namespace SparkCell {
 
 		virtual void Update();
 
-		void SlewLeft(float inc);
-		void SlewRight(float inc);
-		void SlewUp(float inc);
-		void SlewDown(float inc);
+		void SlewLeft();
+		void SlewRight();
+		void SlewUp();
+		void SlewDown();
 
 		void TryLock();
 

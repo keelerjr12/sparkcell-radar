@@ -3,6 +3,7 @@
 #include "../ui/VirtualDisplay.h"
 #include "../util/Location.h"
 #include "../util/Math.h"
+#include <numbers>
 
 namespace SparkCell {
 
@@ -108,7 +109,8 @@ namespace SparkCell {
 
 		vd.DrawString(rng_str, -.75, -.75);
 
-		const auto ang = static_cast<int>(std::round(ToDegrees(3.14159/2 - std::atan2f(y, x))+360)) % 360;
+		//const auto ang = static_cast<int>(std::round(ToDegrees(3.14159/2 - std::atan2f(y, x))+360)) % 360;
+		const auto ang = static_cast<int>(std::round(ToDegrees(std::numbers::pi/2 - std::atan2f(y, x))+360)) % 360;
 		auto ang_str = std::to_wstring(ang);
 
 		vd.DrawString(ang_str, -1, -.75);

@@ -18,38 +18,38 @@ void FSAPI KeyEventHandler(ID32 event, UINT32 evdata, PVOID userdata)
 		break;
 	case KEY_GUN_SYSTEM_ROTATE_GUNS:
 		if (evdata == 45) {
-			radar->SlewUp(.5f);
-			radar->SlewRight(-.5f);
+			radar->SlewUp();
+			radar->SlewRight();
 		}
 		else if (evdata == 90)
 		{
-			radar->SlewRight(-.5f);
+			radar->SlewRight();
 		}
 		else if (evdata == 135) {
-			radar->SlewDown(-.5f);
-			radar->SlewRight(-.5f);
+			radar->SlewDown();
+			radar->SlewRight();
 		}
 		else if (evdata == 180)
 		{
-			radar->SlewDown(-.5f);
+			radar->SlewDown();
 		}
 		else if (evdata == 225)
 		{
-			radar->SlewDown(-.5f);
-			radar->SlewLeft(.5f);
+			radar->SlewDown();
+			radar->SlewLeft();
 		}
 		else if (evdata == 270)
 		{
-			radar->SlewLeft(.5f);
+			radar->SlewLeft();
 		}
 		else if (evdata == 315)
 		{
-			radar->SlewUp(.5f);
-			radar->SlewLeft(.5f);
+			radar->SlewUp();
+			radar->SlewLeft();
 		}
 		else if (evdata == 0)
 		{
-			radar->SlewUp(.5f);
+			radar->SlewUp();
 		}
 		break;
     };

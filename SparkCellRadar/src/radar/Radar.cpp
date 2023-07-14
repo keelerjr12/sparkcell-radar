@@ -28,6 +28,9 @@
 };*/
 namespace SparkCell {
 
+	static constexpr float DEFAULT_HORZ_SLEW_RATE = .5f;
+	static constexpr float DEFAULT_VERT_SLEW_RATE = .5f;
+
 	void Radar::Update() {
 		mRadarTargets.clear();
 
@@ -63,24 +66,20 @@ namespace SparkCell {
 		m_y_inc = 0;
 	}
 
-	void Radar::SlewLeft(float inc) {
-		m_x_inc = inc;
-		//m_cursor_az += inc * 1.f / 18 * 20;
+	void Radar::SlewLeft() {
+		m_x_inc = DEFAULT_HORZ_SLEW_RATE;
 	}
 
-	void Radar::SlewRight(float inc) {
-		m_x_inc = inc;
-		//m_cursor_az += inc * 1.f / 18 * 20;
+	void Radar::SlewRight() {
+		m_x_inc = -DEFAULT_HORZ_SLEW_RATE;
 	}
 
-	void Radar::SlewUp(float inc) {
-		m_y_inc = inc;
-		//m_cursor_rng += inc * 1.f / 18 * 20;
+	void Radar::SlewUp() {
+		m_y_inc = DEFAULT_VERT_SLEW_RATE;
 	}
 
-	void Radar::SlewDown(float inc) {
-		m_y_inc = inc;
-		//m_cursor_rng += inc * 1.f / 18 * 20;
+	void Radar::SlewDown() {
+		m_y_inc = -DEFAULT_VERT_SLEW_RATE;
 	}
 
 	void Radar::TryLock()
@@ -106,7 +105,9 @@ namespace SparkCell {
 		const auto NUM_DEGS = 3.0f;
 		const auto NUM_MILES = 1.0f;
 
-		const auto ang_diff = std::abs(180.f - std::abs(std::abs(m_cursor_az - tgt.Bearing()) - 180.f));
+		const auto crs_bng = (static_cast<int>(std::round(mHost->heading() + m_cursor_az) + 360)) % 360;
+		const auto ang_diff = std::abs(180.f - std::abs(std::abs(crs_bng - tgt.Bearing()) - 180.f));
+
 		if (ang_diff < NUM_DEGS && abs(m_cursor_rng - tgt.Range()) < NUM_MILES) {
 			return true;
 		}
