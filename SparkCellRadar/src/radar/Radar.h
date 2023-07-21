@@ -11,7 +11,7 @@ namespace SparkCell {
 	public:
 		Radar(const Aircraft& host) : mHost(&host) { }
 
-		void Update(const std::vector<RadarTarget>& tgts);
+		void Update(const std::vector<RadarTarget>& targets);
 
 		void SlewLeft();
 		void SlewRight();

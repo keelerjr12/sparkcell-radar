@@ -31,11 +31,38 @@ namespace SparkCell {
 	static constexpr float DEFAULT_HORZ_SLEW_RATE = .5f;
 	static constexpr float DEFAULT_VERT_SLEW_RATE = .5f;
 
-	void Radar::Update(const std::vector<RadarTarget>& tgts) {
+	void Radar::Update(const std::vector<RadarTarget>& targets) {
+
+		/*CComPtr<P3D::IBaseObjectV400> spUserAvatar;
+		P3D::PdkServices::GetSimObjectManager()->GetUserAvatar(&spUserAvatar);
+
+		auto userAvatarId = spUserAvatar->GetId();
+		auto userObjectId = mHost->id();
+
+		UINT32 nObjects = 100;
+		UINT idArr[100];
+		P3D::P3DDXYZ dxyz{ mHost->lat(), mHost->lon(), mHost->alt()};
+		P3D::PdkServices::GetSimObjectManager()->GetObjectsInRadius(dxyz, 6000*40, nObjects, idArr);
+
+		for (auto i = 0; i < nObjects; ++i) {
+
+			auto objId = idArr[i];
+			CComPtr<P3D::IBaseObjectV400> aiObject;
+
+			if ((objId != userObjectId) && (objId != userAvatarId) && SUCCEEDED(P3D::PdkServices::GetSimObjectManager()->GetObjectW(objId, &aiObject))) {
+				const auto targetAircraft = Aircraft(aiObject);
+				const auto tgt = RadarTarget(*mHost, targetAircraft);
+
+				if (abs(tgt.ATA()) <= GetAzimuth()) {
+					mRadarTargets.push_back(tgt);
+				}
+>>>>>>> 640bb602ea0f2dcf4ed94ef10f6e001b05150cf8
+			}
+		}*/
 		mRadarTargets.clear();
 
-		for (const auto& tgt : tgts) {
-			if (abs(tgt.ATA()) <= GetAzimuth()) {
+		for (const auto& tgt : targets) {
+			if (std::abs(tgt.ATA()) <= GetAzimuth()) {
 				mRadarTargets.push_back(tgt);
 			}
 		}

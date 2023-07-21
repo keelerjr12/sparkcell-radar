@@ -73,17 +73,18 @@ void RadarGaugeCallback::Update()
 	CComPtr<P3D::IBaseObjectV400> spUserAvatar;
 	P3D::PdkServices::GetSimObjectManager()->GetUserAvatar(&spUserAvatar);
 
-	const auto& host = radar_->Host();
-
-	const auto userAvatarId = spUserAvatar->GetId();
-	const auto userObjectId = host.id();
+	auto userAvatarId = spUserAvatar->GetId();
+	auto& host = radar_->Host();
+	auto userObjectId = host.id();
 
 	UINT32 nObjects = 100;
 	UINT idArr[100];
 	P3D::P3DDXYZ dxyz{ host.lat(), host.lon(), host.alt()};
 	P3D::PdkServices::GetSimObjectManager()->GetObjectsInRadius(dxyz, 6000*40, nObjects, idArr);
 
-	std::vector<SparkCell::RadarTarget> tgts;
+	std::vector<SparkCell::RadarTarget> targets;
+	targets.reserve(nObjects);
+
 	for (auto i = 0; i < nObjects; ++i) {
 
 		auto objId = idArr[i];
@@ -92,11 +93,12 @@ void RadarGaugeCallback::Update()
 		if ((objId != userObjectId) && (objId != userAvatarId) && SUCCEEDED(P3D::PdkServices::GetSimObjectManager()->GetObjectW(objId, &aiObject))) {
 			const auto targetAircraft = SparkCell::Aircraft(aiObject);
 			const auto tgt = SparkCell::RadarTarget(host, targetAircraft);
-			tgts.push_back(tgt);
+
+			targets.push_back(tgt);
 		}
 	}
 
-	radar_->Update(tgts);
+	radar_->Update(targets);
 }
 
 bool RadarGaugeCallback::GetPropertyValue(SINT32 id, FLOAT64* pValue)
