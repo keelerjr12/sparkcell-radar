@@ -8,6 +8,10 @@ namespace SparkCell {
 	RadarTarget::RadarTarget(const Aircraft& host, const Aircraft& tgt)
 		: host_(host), target_(tgt) { } 
 
+	int RadarTarget::Id() const {
+		return target_.id();
+	}
+
 	float RadarTarget::Airspeed() const {
 		return target_.airspeed();
 	}

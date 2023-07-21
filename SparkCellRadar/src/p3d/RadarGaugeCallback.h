@@ -25,7 +25,7 @@ public:
 
 private:
 	UINT32 mContainerId;
-	SparkCell::Radar* mRadar;
+	SparkCell::Radar* radar_;
 
 	DECLARE_PANEL_CALLBACK_REFCOUNT(RadarGaugeCallback);
 };

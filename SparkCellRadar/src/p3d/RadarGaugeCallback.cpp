@@ -54,13 +54,13 @@ void FSAPI KeyEventHandler(ID32 event, UINT32 evdata, PVOID userdata)
 		break;
     };
 }
-RadarGaugeCallback::RadarGaugeCallback(UINT32 containerId, const SparkCell::Aircraft& host) : m_RefCount(1), mContainerId(containerId), mRadar(new SparkCell::Radar(host)) {
-    P3D::PdkServices::GetPanelSystem()->RegisterKeyEventHandler(static_cast<GAUGE_KEY_EVENT_HANDLER>(KeyEventHandler), mRadar);
+RadarGaugeCallback::RadarGaugeCallback(UINT32 containerId, const SparkCell::Aircraft& host) : m_RefCount(1), mContainerId(containerId), radar_(new SparkCell::Radar(host)) {
+    P3D::PdkServices::GetPanelSystem()->RegisterKeyEventHandler(static_cast<GAUGE_KEY_EVENT_HANDLER>(KeyEventHandler), radar_);
 }
 
 RadarGaugeCallback::~RadarGaugeCallback() {
-    P3D::PdkServices::GetPanelSystem()->UnregisterKeyEventHandler(static_cast<GAUGE_KEY_EVENT_HANDLER>(KeyEventHandler), mRadar);
-	delete mRadar;
+    P3D::PdkServices::GetPanelSystem()->UnregisterKeyEventHandler(static_cast<GAUGE_KEY_EVENT_HANDLER>(KeyEventHandler), radar_);
+	delete radar_;
 }
 
 IGaugeCCallback* RadarGaugeCallback::QueryInterface(LPCSTR pszInterface)
@@ -70,7 +70,33 @@ IGaugeCCallback* RadarGaugeCallback::QueryInterface(LPCSTR pszInterface)
 
 void RadarGaugeCallback::Update()
 {
-	mRadar->Update();
+	CComPtr<P3D::IBaseObjectV400> spUserAvatar;
+	P3D::PdkServices::GetSimObjectManager()->GetUserAvatar(&spUserAvatar);
+
+	const auto& host = radar_->Host();
+
+	const auto userAvatarId = spUserAvatar->GetId();
+	const auto userObjectId = host.id();
+
+	UINT32 nObjects = 100;
+	UINT idArr[100];
+	P3D::P3DDXYZ dxyz{ host.lat(), host.lon(), host.alt()};
+	P3D::PdkServices::GetSimObjectManager()->GetObjectsInRadius(dxyz, 6000*40, nObjects, idArr);
+
+	std::vector<SparkCell::RadarTarget> tgts;
+	for (auto i = 0; i < nObjects; ++i) {
+
+		auto objId = idArr[i];
+		CComPtr<P3D::IBaseObjectV400> aiObject;
+
+		if ((objId != userObjectId) && (objId != userAvatarId) && SUCCEEDED(P3D::PdkServices::GetSimObjectManager()->GetObjectW(objId, &aiObject))) {
+			const auto targetAircraft = SparkCell::Aircraft(aiObject);
+			const auto tgt = SparkCell::RadarTarget(host, targetAircraft);
+			tgts.push_back(tgt);
+		}
+	}
+
+	radar_->Update(tgts);
 }
 
 bool RadarGaugeCallback::GetPropertyValue(SINT32 id, FLOAT64* pValue)
@@ -106,7 +132,7 @@ bool RadarGaugeCallback::SetPropertyValue(SINT32 id, LPCWSTR szValue)
 IGaugeCDrawable* RadarGaugeCallback::CreateGaugeCDrawable(SINT32 id, const IGaugeCDrawableCreateParameters* pParameters)
 {
 	if (id == RadarGaugeDrawableId::RADAR) {
-		return new RadarGaugeDrawable(pParameters, mRadar);
+		return new RadarGaugeDrawable(pParameters, radar_);
 	}
 
 	return nullptr;

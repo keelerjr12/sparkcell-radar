@@ -11,7 +11,7 @@ namespace SparkCell {
 	public:
 		Radar(const Aircraft& host) : mHost(&host) { }
 
-		virtual void Update();
+		void Update(const std::vector<RadarTarget>& tgts);
 
 		void SlewLeft();
 		void SlewRight();
@@ -31,6 +31,7 @@ namespace SparkCell {
 		int GetCursorRange() const;
 
 		bool IsCursorNear(const RadarTarget& tgt) const;
+		bool IsLockedTo(const RadarTarget& tgt) const;
 
 		std::vector<RadarTarget> GetRadarTargets() const;
 		const RadarTarget* const GetLockedTarget() const;

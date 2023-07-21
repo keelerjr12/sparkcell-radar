@@ -74,8 +74,6 @@ namespace SparkCell {
 
 	// TODO: use the cursor position to show bullseye (SPS for now)
 	static void RenderBullseye(VirtualDisplay& vd, const Radar& radar, float ac_lat, float ac_lon) {
-		// auto cursor = get_cursors()
-		// 
 
 		auto bng_be = CalculateBearing(33.9872875, -98.5934719, ac_lat, ac_lon);
 		auto rng_be = CalculateRange(33.9872875, -98.5934719, ac_lat, ac_lon);
@@ -109,7 +107,6 @@ namespace SparkCell {
 
 		vd.DrawString(rng_str, -.75, -.75);
 
-		//const auto ang = static_cast<int>(std::round(ToDegrees(3.14159/2 - std::atan2f(y, x))+360)) % 360;
 		const auto ang = static_cast<int>(std::round(ToDegrees(std::numbers::pi/2 - std::atan2f(y, x))+360)) % 360;
 		auto ang_str = std::to_wstring(ang);
 
@@ -163,7 +160,7 @@ namespace SparkCell {
 			vd.DrawRect(rc);
 
 			// alt label per target
-			if (radar.IsCursorNear(target)) {
+			if (radar.IsCursorNear(target) || radar.IsLockedTo(target)) {
 				const auto altitude = std::to_wstring(static_cast<int>(target.Altitude() / 1000));
 
 				Label alt_lbl{ altitude, &vd };

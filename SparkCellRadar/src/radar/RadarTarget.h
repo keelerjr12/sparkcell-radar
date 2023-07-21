@@ -12,6 +12,8 @@ namespace SparkCell {
 	public:
 		RadarTarget(const Aircraft& host, const Aircraft& tgt);
 
+		int Id() const;
+
 		float Airspeed() const;
 		float Altitude() const;
 

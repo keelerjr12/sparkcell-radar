@@ -31,7 +31,7 @@ void RadarGaugeDrawable::Show(bool on)
 
 bool RadarGaugeDrawable::Draw(IGaugeCDrawableDrawParameters* pParameters, PIXPOINT size, HDC hdc, PIMAGE pImage)
 {
-    if (!radar_screen_) {
+    if (!radar_screen_ || vd_->DisplayBox().Width() != size.x || vd_->DisplayBox().Height() != size.y) {
 		vd_ = std::make_unique<SparkCell::VirtualDisplay>(hdc, size.x, size.y);
         radar_screen_ = std::make_unique<SparkCell::RadarScreen>(vd_.get(), radar_);
     }
