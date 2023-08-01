@@ -18,6 +18,7 @@ namespace SparkCell {
 		RadarScreen(VirtualDisplay* vd, const Radar* const radar);
 
 		void Render();
+		void Update();
 
 	private:
 		void Setup();

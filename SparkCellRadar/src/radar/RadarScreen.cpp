@@ -237,6 +237,15 @@ namespace SparkCell {
 
 	}
 
+	void RadarScreen::Update() {
+		const auto range = std::to_wstring(radar_->GetRange());
+		rng_lbl_.SetText(range);
+
+		auto rng_bx = rng_lbl_.BoundingBox();
+		rng_bx.MoveCenter(-.92, .5);
+		rng_lbl_.Move(rng_bx.X(), rng_bx.Y());
+	}
+
 	void RadarScreen::Setup() {
 		vd_->SetFontSize(vd_->DisplayBox().Width() * .0371);
 

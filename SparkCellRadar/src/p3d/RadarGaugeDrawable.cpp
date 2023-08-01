@@ -23,6 +23,9 @@ FLAGS32 RadarGaugeDrawable::GetFlags()
 
 void RadarGaugeDrawable::Update()
 {
+    if (radar_screen_) {
+        radar_screen_->Update();
+    }
 }
 
 void RadarGaugeDrawable::Show(bool on)

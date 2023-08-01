@@ -42,6 +42,8 @@ namespace SparkCell {
 		const Aircraft* mHost;
 		const RadarTarget* mLockedTarget = nullptr;
 
+		int m_range = 40;
+
 		float m_cursor_az = 0;
 		float m_cursor_rng = 20;
 

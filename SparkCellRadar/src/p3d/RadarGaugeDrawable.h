@@ -30,7 +30,7 @@ public:
 private:
 
 	std::unique_ptr<SparkCell::VirtualDisplay> vd_;
-	std::unique_ptr<SparkCell::RadarScreen> radar_screen_;
+	std::unique_ptr<SparkCell::RadarScreen> radar_screen_ = nullptr;
 	const SparkCell::Radar* const radar_;
 
 };
