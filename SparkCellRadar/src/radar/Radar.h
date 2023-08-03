@@ -27,8 +27,8 @@ namespace SparkCell {
 		int GetBarSetting() const;
 		int GetRange() const;
 
-		int GetCursorAzimuth() const;
-		int GetCursorRange() const;
+		float GetCursorAzimuth() const;
+		float GetCursorRange() const;
 
 		bool IsCursorNear(const RadarTarget& tgt) const;
 		bool IsLockedTo(const RadarTarget& tgt) const;
@@ -37,6 +37,9 @@ namespace SparkCell {
 		const RadarTarget* const GetLockedTarget() const;
 
 	private:
+		void UpdateCursor();
+		void CheckBounds();
+
 		std::vector<RadarTarget> mRadarTargets;
 
 		const Aircraft* mHost;
@@ -49,6 +52,9 @@ namespace SparkCell {
 
 		float m_x_inc = 0.f;
 		float m_y_inc = 0.f;
+
+		int max_range = 160;
+		int min_range = 10;
 	};
 
 }

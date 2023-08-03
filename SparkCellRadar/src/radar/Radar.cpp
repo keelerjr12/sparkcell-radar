@@ -8,29 +8,14 @@
 #include <algorithm>
 #include <cmath>
 #include <numbers>
-#include <iostream>
 #include <vector>
 #include "Aircraft.h"
 
-// A list of simulation variables / registered properties to be collected.
-/*static std::vector<AircraftPropertyTable> gAircraftProperties =
-{
-    { L"SIM TIME",                      L"Seconds",                 },
-    { L"PLANE LATITUDE",                L"Degrees"                  },
-    { L"PLANE LONGITUDE",               L"Degrees"                  },
-    { L"PLANE ALTITUDE",                L"Feet"                     },
-    { L"PLANE PITCH DEGREES",           L"Degrees"                  },
-    { L"PLANE BANK DEGREES",            L"Degrees"                  },
-    { L"PLANE HEADING DEGREES TRUE",    L"Degrees"                  },
-    { L"VELOCITY WORLD X",              L"Feet per second"          },
-    { L"VELOCITY WORLD Y",              L"Feet per second"          },
-    { L"VELOCITY WORLD Z",              L"Feet per second"          }
-};*/
 namespace SparkCell {
 
 	static constexpr float DEFAULT_HORZ_SLEW_RATE = .6667f;
-	//static constexpr float DEFAULT_VERT_SLEW_RATE = .5f;
 	static constexpr float DEFAULT_VERT_SLEW_RATE = .03056f;
+	static constexpr int UPDATES_PER_SECOND = 18;
 
 	void Radar::Update(const std::vector<RadarTarget>& targets) {
 		mRadarTargets.clear();
@@ -41,20 +26,7 @@ namespace SparkCell {
 			}
 		}
 
-		m_cursor_az -= m_x_inc * 1.f / 18 * 60;
-		//m_cursor_rng += m_y_inc * 1.f / 18 * 60;
-		m_cursor_rng += GetRange() * m_y_inc;
-
-		if (m_cursor_rng <= (static_cast<double>(GetRange()) * .05)) {
-			m_range /= 2;
-			m_cursor_rng = m_range / 2;
-		} else if (m_cursor_rng >= (static_cast<double>(GetRange()) * .95)) {
-			m_range *= 2;
-			m_cursor_rng = m_range / 2.0;
-		}
-
-		m_x_inc = 0;
-		m_y_inc = 0;
+		UpdateCursor();
 	}
 
 	void Radar::SlewLeft() {
@@ -84,12 +56,12 @@ namespace SparkCell {
 		}
 	}
 
-	int Radar::GetCursorAzimuth() const {
-		return static_cast<int>(m_cursor_az);
+	float Radar::GetCursorAzimuth() const {
+		return m_cursor_az;
 	}
 
-	int Radar::GetCursorRange() const {
-		return static_cast<int>(m_cursor_rng);
+	float Radar::GetCursorRange() const {
+		return m_cursor_rng;
 	}
 
 	bool Radar::IsCursorNear(const RadarTarget& tgt) const {
@@ -132,12 +104,42 @@ namespace SparkCell {
 		return m_range;
 	}
 
-	std::vector<RadarTarget> SparkCell::Radar::GetRadarTargets() const {
+	std::vector<RadarTarget> Radar::GetRadarTargets() const {
 		return mRadarTargets;
 	}
 
-	const RadarTarget* const SparkCell::Radar::GetLockedTarget() const {
+	const RadarTarget* const Radar::GetLockedTarget() const {
 		return mLockedTarget;
+	}
+
+	void Radar::UpdateCursor() {
+		m_cursor_az -= m_x_inc * (60.0f / UPDATES_PER_SECOND);
+		m_cursor_rng += GetRange() * m_y_inc;
+
+		m_x_inc = 0;
+		m_y_inc = 0;
+
+		CheckBounds();
+	}
+
+	void Radar::CheckBounds() {
+		m_cursor_az = min(m_cursor_az, GetAzimuth());
+		m_cursor_az = max(m_cursor_az, -GetAzimuth());
+
+		m_cursor_rng = min(m_cursor_rng, max_range);
+		m_cursor_rng = max(m_cursor_rng, 0);
+
+		const auto selected_rng = static_cast<float>(GetRange());
+		const auto upper_rng_bound = selected_rng * .95;
+		const auto lower_rng_bound = selected_rng * .05;
+
+		if ((m_cursor_rng <= lower_rng_bound) && (GetRange() > min_range)) {
+			m_range /= 2;
+			m_cursor_rng = m_range / 2.f;
+		} else if ((m_cursor_rng >= upper_rng_bound) && (GetRange() < max_range)) {
+			m_range *= 2;
+			m_cursor_rng = m_range / 2.f;
+		}
 	}
 
 }

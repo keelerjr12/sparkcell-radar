@@ -179,8 +179,8 @@ namespace SparkCell {
 		const auto width = .066;
 		const auto height =.066;
 
-		auto x = (static_cast<float>(radar.GetCursorAzimuth()) / radar.GetAzimuth());
-		auto y = (static_cast<float>(radar.GetCursorRange()) * 2 / radar.GetRange()) - 1;
+		auto x = (radar.GetCursorAzimuth() / radar.GetAzimuth());
+		auto y = (radar.GetCursorRange() * 2 / radar.GetRange()) - 1;
 		Rect rc{ 0, 0, width, height };
 		rc.MoveCenter(x, y);
 
