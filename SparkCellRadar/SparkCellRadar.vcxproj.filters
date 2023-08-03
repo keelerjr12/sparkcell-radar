@@ -45,6 +45,7 @@
     </ClCompile>
     <ClCompile Include="src\util\Math.cpp" />
     <ClCompile Include="src\util\Location.cpp" />
+    <ClCompile Include="src\radar\RadarCursor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\p3d\RadarAircraftCallback.h">
@@ -79,6 +80,7 @@
     </ClInclude>
     <ClInclude Include="src\util\Math.h" />
     <ClInclude Include="src\util\Location.h" />
+    <ClInclude Include="src\radar\RadarCursor.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header">

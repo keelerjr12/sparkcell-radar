@@ -13,9 +13,10 @@
 
 namespace SparkCell {
 
-	static constexpr float DEFAULT_HORZ_SLEW_RATE = .6667f;
-	static constexpr float DEFAULT_VERT_SLEW_RATE = .03056f;
-	static constexpr int UPDATES_PER_SECOND = 18;
+
+	Radar::Radar(const Aircraft& host) : 
+		mHost(&host), 
+		crsr(m_range, max_range, min_range, max_az, std::bind(&Radar::ScopeUp, this), std::bind(&Radar::ScopeDown, this)) { }
 
 	void Radar::Update(const std::vector<RadarTarget>& targets) {
 		mRadarTargets.clear();
@@ -26,23 +27,23 @@ namespace SparkCell {
 			}
 		}
 
-		UpdateCursor();
+		crsr.Update();
 	}
 
 	void Radar::SlewLeft() {
-		m_x_inc = DEFAULT_HORZ_SLEW_RATE;
+		crsr.SlewLeft();
 	}
 
 	void Radar::SlewRight() {
-		m_x_inc = -DEFAULT_HORZ_SLEW_RATE;
+		crsr.SlewRight();
 	}
 
 	void Radar::SlewUp() {
-		m_y_inc = DEFAULT_VERT_SLEW_RATE;
+		crsr.SlewUp();
 	}
 
 	void Radar::SlewDown() {
-		m_y_inc = -DEFAULT_VERT_SLEW_RATE;
+		crsr.SlewDown();
 	}
 
 	void Radar::TryLock()
@@ -57,21 +58,18 @@ namespace SparkCell {
 	}
 
 	float Radar::GetCursorAzimuth() const {
-		return m_cursor_az;
+		return crsr.Azimuth();
 	}
 
 	float Radar::GetCursorRange() const {
-		return m_cursor_rng;
+		return crsr.Range();
 	}
 
 	bool Radar::IsCursorNear(const RadarTarget& tgt) const {
-		const auto NUM_DEGS = 3.0f;
-		const auto NUM_MILES = 1.0f;
-
-		const auto crs_bng = (static_cast<int>(std::round(mHost->heading() + m_cursor_az) + 360)) % 360;
+		const auto crs_bng = (static_cast<int>(std::round(mHost->heading() + crsr.Azimuth()) + 360)) % 360;
 		const auto ang_diff = std::abs(180.f - std::abs(std::abs(crs_bng - tgt.Bearing()) - 180.f));
 
-		if (ang_diff < NUM_DEGS && abs(m_cursor_rng - tgt.Range()) < NUM_MILES) {
+		if (crsr.IsNear(ang_diff, tgt.Range())) {
 			return true;
 		}
 
@@ -112,34 +110,14 @@ namespace SparkCell {
 		return mLockedTarget;
 	}
 
-	void Radar::UpdateCursor() {
-		m_cursor_az -= m_x_inc * (60.0f / UPDATES_PER_SECOND);
-		m_cursor_rng += GetRange() * m_y_inc;
-
-		m_x_inc = 0;
-		m_y_inc = 0;
-
-		CheckBounds();
+	int Radar::ScopeDown() {
+		m_range /= 2;
+		return m_range;
 	}
-
-	void Radar::CheckBounds() {
-		m_cursor_az = min(m_cursor_az, GetAzimuth());
-		m_cursor_az = max(m_cursor_az, -GetAzimuth());
-
-		m_cursor_rng = min(m_cursor_rng, max_range);
-		m_cursor_rng = max(m_cursor_rng, 0);
-
-		const auto selected_rng = static_cast<float>(GetRange());
-		const auto upper_rng_bound = selected_rng * .95;
-		const auto lower_rng_bound = selected_rng * .05;
-
-		if ((m_cursor_rng <= lower_rng_bound) && (GetRange() > min_range)) {
-			m_range /= 2;
-			m_cursor_rng = m_range / 2.f;
-		} else if ((m_cursor_rng >= upper_rng_bound) && (GetRange() < max_range)) {
-			m_range *= 2;
-			m_cursor_rng = m_range / 2.f;
-		}
+	
+	int Radar::ScopeUp() {
+		m_range *= 2;
+		return m_range;
 	}
 
 }

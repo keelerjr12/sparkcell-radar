@@ -1,7 +1,9 @@
 #ifndef RADAR_H
 #define RADAR_H
 
+#include "RadarCursor.h"
 #include "RadarTarget.h"
+#include <functional>
 #include <vector>
 
 namespace SparkCell {
@@ -9,7 +11,7 @@ namespace SparkCell {
 	class Radar
 	{
 	public:
-		Radar(const Aircraft& host) : mHost(&host) { }
+		Radar(const Aircraft& host);
 
 		void Update(const std::vector<RadarTarget>& targets);
 
@@ -37,8 +39,9 @@ namespace SparkCell {
 		const RadarTarget* const GetLockedTarget() const;
 
 	private:
-		void UpdateCursor();
-		void CheckBounds();
+
+		int ScopeDown();
+		int ScopeUp();
 
 		std::vector<RadarTarget> mRadarTargets;
 
@@ -47,14 +50,12 @@ namespace SparkCell {
 
 		int m_range = 40;
 
-		float m_cursor_az = 0;
-		float m_cursor_rng = 20;
-
-		float m_x_inc = 0.f;
-		float m_y_inc = 0.f;
-
 		int max_range = 160;
 		int min_range = 10;
+
+		int max_az = 60;
+
+		RadarCursor crsr;
 	};
 
 }

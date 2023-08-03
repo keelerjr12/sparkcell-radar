@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\radar\Aircraft.cpp" />
+    <ClCompile Include="src\radar\RadarCursor.cpp" />
     <ClCompile Include="src\ui\Label.cpp" />
     <ClCompile Include="src\radar\Radar.cpp" />
     <ClCompile Include="src\p3d\RadarAircraftCallback.cpp" />
@@ -177,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\radar\Aircraft.h" />
+    <ClInclude Include="src\radar\RadarCursor.h" />
     <ClInclude Include="src\radar\RadarScreen.h" />
     <ClInclude Include="src\ui\Rect.h" />
     <ClInclude Include="src\ui\Label.h" />
